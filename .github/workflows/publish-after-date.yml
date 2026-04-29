@@ -1,0 +1,69 @@
+name: Publish advice repositories after release date
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Runs daily at 11:59 UTC
+    - cron: '59 11 * * *'
+
+jobs:
+  publish-visibility:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout registry repository
+        uses: actions/checkout@v4
+
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Check and publish repositories
+        env:
+          GH_TOKEN: ${{ secrets.CROSS_ORG_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          TODAY=$(date -u +%Y-%m-%d)
+
+          echo "Today (UTC): $TODAY"
+
+          jq -c '.sets[] | select(.publish_after != null and .publish_after != "")' repos.json \
+          | while read -r set; do
+
+            REPO_NAME=$(jq -r '.repo_name' <<<"$set")
+            ORG=$(jq -r '.org_target' <<<"$set")
+            PUBLISH_AFTER=$(jq -r '.publish_after' <<<"$set")
+
+            echo "::group::Checking $ORG/$REPO_NAME"
+
+            if [[ "$TODAY" < "$PUBLISH_AFTER" ]]; then
+              echo "Not yet public: $TODAY < $PUBLISH_AFTER"
+              echo "::endgroup::"
+              continue
+            fi
+
+            VISIBILITY=$(curl -s \
+              -H "Authorization: Bearer $GH_TOKEN" \
+              -H "Accept: application/vnd.github+json" \
+              https://api.github.com/repos/$ORG/$REPO_NAME \
+              | jq -r '.private')
+
+            if [[ "$VISIBILITY" == "false" ]]; then
+              echo "Repository already public"
+              echo "::endgroup::"
+              continue
+            fi
+
+            echo "Making repository public..."
+
+            curl -s -X PATCH \
+              -H "Authorization: Bearer $GH_TOKEN" \
+              -H "Accept: application/vnd.github+json" \
+              https://api.github.com/repos/$ORG/$REPO_NAME \
+              -d '{"private": false}'
+
+            echo "✅ $ORG/$REPO_NAME is now public"
+            echo "::endgroup::"
+          done
+

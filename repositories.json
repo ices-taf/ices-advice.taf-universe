@@ -4,6 +4,7 @@
       "repo_name": "2026_san.sa.1r",
       "org_source": "ices-taf",
       "org_target": "ices-advice",
+      "publish_after": "2026-02-27",
       "repos": [
         {
           "name": "2026_san.sa.1r_assessment",
@@ -18,6 +19,7 @@
       "repo_name": "2026_san.sa.2r",
       "org_source": "ices-taf",
       "org_target": "ices-advice",
+      "publish_after": "2026-02-27",
       "repos": [
         {
           "name": "2026_san.sa.2r_assessment",
