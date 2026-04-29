@@ -8,6 +8,7 @@ on:
   push:
     paths:
       - repos.json
+      - publish-after-date.yml
 
 jobs:
   publish-visibility:
