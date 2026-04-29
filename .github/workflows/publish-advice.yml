@@ -34,7 +34,7 @@ jobs:
           set -euo pipefail
 
           AUTH() {
-            echo "https://x-access-token:${TOKEN}@github.com/$1/$2.git"
+            echo "https://username:${TOKEN}@github.com/$1/$2.git"
           }
 
           UPDATED=false
