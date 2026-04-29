@@ -63,7 +63,52 @@ jobs:
               https://api.github.com/repos/$ORG/$REPO_NAME \
               -d '{"private": false}'
 
+            echo "$ORG/$REPO_NAME" >> published_repos.txt
             echo "✅ $ORG/$REPO_NAME is now public"
             echo "::endgroup::"
           done
 
+      - name: Notify Teams
+        if: always()
+        env:
+          WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
+        shell: bash
+        run: |
+          if [ ! -f published_repos.txt ]; then
+            echo "No repositories published in this run"
+            exit 0
+          fi
+
+          REPOS=$(sort -u published_repos.txt)
+
+          if [ -z "$REPOS" ]; then
+            echo "Published file empty — nothing to notify"
+            exit 0
+          fi
+
+          # Convert list to markdown bullets
+          BULLETS=$(echo "$REPOS" | sed 's/^/- /')
+
+          payload=$(jq -n \
+            --arg date "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+            --arg repos "$BULLETS" \
+            '{
+              "@type": "MessageCard",
+              "@context": "https://schema.org/extensions",
+              "summary": "Advice repositories published",
+              "themeColor": "2EB886",
+              "title": "🚀 Advice repositories published",
+              "text": ("The following repositories have been made public:\n\n" + $repos),
+              "sections": [
+                {
+                  "facts": [
+                    { "name": "Published at (UTC)", "value": $date }
+                  ]
+                }
+              ]
+            }')
+
+          curl -X POST \
+            -H "Content-Type: application/json" \
+            -d "$payload" \
+            "$WEBHOOK_URL"
