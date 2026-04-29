@@ -96,7 +96,7 @@ jobs:
             fi
 
             # --- CASE 3: already in correct state ---
-            if [[ "$PRIVATE" == "false" ]]; then
+            if [[ "$PRIVATE" == "false" && "$TODAY_EPOCH" -eq "$PUBLISH_AFTER_EPOCH" ]]; then
               echo "Repository is already public"
               echo "$ORG/$REPO_NAME" >> already_public_repos.txt
             fi
@@ -118,10 +118,10 @@ jobs:
             exit 0
           fi
 
+          WARNING_SECTION=""
           PUBLIC_SECTION=""
           ALREADY_PUBLIC_SECTION=""
           REVERTED_SECTION=""
-          WARNING_SECTION=""
 
           if [ -f pat_status.txt ]; then
             WARNING_SECTION=$(printf "⚠️ **GitHub access failed (401 Unauthorized)**\n\nThe Personal Access Token used by this workflow appears to be **expired or invalid**.\n\nPlease update the `CROSS_ORG_TOKEN` secret to restore automated publishing.\n\n")
@@ -134,13 +134,6 @@ jobs:
             fi
           fi
 
-          if [ -f already_public_repos.txt ]; then
-            ALREADY_PUBLIC_LIST=$(sort -u already_public_repos.txt | awk '{print "- https://github.com/" $0}')
-            if [ -n "$ALREADY_PUBLIC_LIST" ]; then
-              ALREADY_PUBLIC_SECTION=$(printf "**ℹ️ Repositories already public:**\n\n%s\n\n" "$ALREADY_PUBLIC_LIST")
-            fi
-          fi
-
           if [ -f reverted_to_private.txt ]; then
             REVERTED_LIST=$(sort -u reverted_to_private.txt | awk '{print "- https://github.com/" $0}')
             if [ -n "$REVERTED_LIST" ]; then
@@ -148,7 +141,17 @@ jobs:
             fi
           fi
 
-          if [ -z "$WARNING_SECTION" ] && [ -z "$PUBLIC_SECTION" ] && [ -z "$REVERTED_SECTION" ] && [ -z "$ALREADY_PUBLIC_SECTION" ]; then
+          if [ -f already_public_repos.txt ]; then
+            ALREADY_PUBLIC_LIST=$(sort -u already_public_repos.txt | awk '{print "- https://github.com/" $0}')
+            if [ -n "$ALREADY_PUBLIC_LIST" ]; then
+              ALREADY_PUBLIC_SECTION=$(printf "**ℹ️ Repositories already public:**\n\n%s\n\n" "$ALREADY_PUBLIC_LIST")
+            fi
+          fi
+
+          # Do not report if everything was already public and nothing else happened
+          if [ -z "$WARNING_SECTION" ] && \
+            [ -z "$PUBLIC_SECTION" ] && \
+            [ -z "$REVERTED_SECTION" ]; then
             echo "Nothing to report"
             exit 0
           fi
