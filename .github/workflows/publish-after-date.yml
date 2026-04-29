@@ -71,7 +71,7 @@ jobs:
             fi
 
             # --- CASE 2: repo should be public and is private ---
-            if [[ "$TODAY" >= "$PUBLISH_AFTER" && "$VISIBILITY" == "true" ]]; then
+            if [[ "$TODAY" -ge "$PUBLISH_AFTER" && "$VISIBILITY" == "true" ]]; then
               echo "Making repository public"
 
               curl -s -X PATCH \
