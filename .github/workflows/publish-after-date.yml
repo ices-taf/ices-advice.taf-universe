@@ -110,6 +110,14 @@ jobs:
           WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
         shell: bash
         run: |
+          # Do not report if everything was already public and nothing else happened
+          if [ ! -f published_repos.txt ] && \
+            [ ! -f reverted_to_private.txt ] && \
+            [ ! -f pat_status.txt ]; then
+            echo "All repositories already public – no notification sent"
+            exit 0
+          fi
+
           PUBLIC_SECTION=""
           ALREADY_PUBLIC_SECTION=""
           REVERTED_SECTION=""
