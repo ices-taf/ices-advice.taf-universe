@@ -5,7 +5,7 @@ on:
   push:
     paths:
       - repos.json
-      - publish_state.json
+      - .github/workflows/publish_state.json
 
 jobs:
   publish:
