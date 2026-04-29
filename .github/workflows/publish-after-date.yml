@@ -37,10 +37,10 @@ jobs:
 
             REPO_NAME=$(jq -r '.repo_name' <<<"$set")
             ORG=$(jq -r '.org_target' <<<"$set")
-            PUBLISH_AFTER=$(jq -r '.publish_after' <<<"$set")
+            PUBLISH_AFTER_RAW=$(jq -r '.publish_after' <<<"$set")
+            PUBLISH_AFTER=$(date -d "$PUBLISH_AFTER_RAW" +%Y-%m-%d)
 
             echo "::group::Checking $ORG/$REPO_NAME"
-
 
             HTTP_STATUS=$(curl -s -o response.json -w "%{http_code}" \
               -H "Authorization: Bearer $GH_TOKEN" \
@@ -57,7 +57,7 @@ jobs:
             TODAY=$(date -u +%Y-%m-%d)
 
             # --- CASE 1: repo should be private but is public ---
-            if [[ "$TODAY" < "$PUBLISH_AFTER" && "$PRIVATE" == "false" ]]; then
+            if [[ "$TODAY" -lt "$PUBLISH_AFTER" && "$PRIVATE" == "false" ]]; then
               echo "Repository is public too early - reverting to private"
 
               curl -s -X PATCH \
@@ -73,7 +73,6 @@ jobs:
             # --- CASE 2: repo should be public and is private ---
             if [[ "$PRIVATE" == "true" ]]; then
               echo "Repository is private - checking if it should be public"
-              echo "Publish after date: $PUBLISH_AFTER"
               if [[ "$TODAY" -ge "$PUBLISH_AFTER" ]]; then
                 echo "Making repository public"
 
