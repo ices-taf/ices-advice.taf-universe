@@ -56,6 +56,10 @@ jobs:
             PRIVATE=$(jq -r '.private' response.json)
             TODAY=$(date -u +%Y-%m-%d)
 
+            echo "Publish after: $PUBLISH_AFTER, Repository is private: $PRIVATE"
+            echo "HTTP status: $HTTP_STATUS"
+            echo "Today: $TODAY"
+
             # --- CASE 1: repo should be private but is public ---
             if [[ "$TODAY" -lt "$PUBLISH_AFTER" && "$PRIVATE" == "false" ]]; then
               echo "Repository is public too early - reverting to private"
