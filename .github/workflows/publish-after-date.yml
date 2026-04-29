@@ -87,8 +87,6 @@ jobs:
             # --- CASE 3: already in correct state ---
             if [[ "$VISIBILITY" == "false" ]]; then
               echo "$ORG/$REPO_NAME" >> already_public_repos.txt
-            else
-              echo "$ORG/$REPO_NAME" >> already_private_repos.txt
             fi
 
             echo "::endgroup::"
