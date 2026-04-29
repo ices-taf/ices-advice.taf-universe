@@ -71,17 +71,21 @@ jobs:
             fi
 
             # --- CASE 2: repo should be public and is private ---
-            if [[ "$TODAY" -ge "$PUBLISH_AFTER" && "$PRIVATE" == "true" ]]; then
-              echo "Making repository public"
+            if [[ "$PRIVATE" == "true" ]]; then
+              echo "Repository is private - checking if it should be public"
+              echo "Publish after date: $PUBLISH_AFTER"
+              if [[ "$TODAY" -ge "$PUBLISH_AFTER" ]]; then
+                echo "Making repository public"
 
-              curl -s -X PATCH \
-                -H "Authorization: Bearer $GH_TOKEN" \
-                -H "Accept: application/vnd.github+json" \
-                https://api.github.com/repos/$ORG/$REPO_NAME \
-                -d '{"private": false}'
+                curl -s -X PATCH \
+                  -H "Authorization: Bearer $GH_TOKEN" \
+                  -H "Accept: application/vnd.github+json" \
+                  https://api.github.com/repos/$ORG/$REPO_NAME \
+                  -d '{"private": false}'
 
-              echo "$ORG/$REPO_NAME" >> published_repos.txt
-              continue
+                echo "$ORG/$REPO_NAME" >> published_repos.txt
+                continue
+              fi
             fi
 
             # --- CASE 3: already in correct state ---
