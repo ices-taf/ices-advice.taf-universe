@@ -28,17 +28,15 @@ jobs:
         run: |
           set -euo pipefail
 
-          TODAY=$(date -u +%Y-%m-%d)
-
-          echo "Today (UTC): $TODAY"
-
           jq -c '.sets[] | select(.publish_after != null and .publish_after != "")' repos.json \
           | while read -r set; do
 
             REPO_NAME=$(jq -r '.repo_name' <<<"$set")
             ORG=$(jq -r '.org_target' <<<"$set")
             PUBLISH_AFTER_RAW=$(jq -r '.publish_after' <<<"$set")
-            PUBLISH_AFTER=$(date -d "$PUBLISH_AFTER_RAW" +%Y-%m-%d)
+
+            PUBLISH_AFTER_EPOCH=$(date -ud "$PUBLISH_AFTER_RAW" +%s)
+            TODAY_EPOCH=$(date -u +%s)
 
             echo "::group::Checking $ORG/$REPO_NAME"
 
@@ -54,14 +52,12 @@ jobs:
             fi
 
             PRIVATE=$(jq -r '.private' response.json)
-            TODAY=$(date -u +%Y-%m-%d)
-
 
             echo "DEBUG date comparison:"
-            echo "  TODAY=$TODAY ($(date -ud "@$TODAY"))"
-            echo "  PUBLISH_AFTER=$PUBLISH_AFTER ($(date -ud "@$PUBLISH_AFTER"))"
+            echo "  TODAY_EPOCH=$TODAY_EPOCH ($(date -ud "@$TODAY_EPOCH"))"
+            echo "  PUBLISH_AFTER_EPOCH=$PUBLISH_AFTER_EPOCH ($(date -ud "@$PUBLISH_AFTER_EPOCH"))"
 
-            if [ "$TODAY" -ge "$PUBLISH_AFTER" ]; then
+            if [ "$TODAY_EPOCH" -ge "$PUBLISH_AFTER_EPOCH" ]; then
               echo "DEBUG: TODAY >= PUBLISH_AFTER"
             else
               echo "DEBUG: TODAY < PUBLISH_AFTER"
@@ -69,7 +65,7 @@ jobs:
 
 
             # --- CASE 1: repo should be private but is public ---
-            if [[ "$TODAY" -lt "$PUBLISH_AFTER" && "$PRIVATE" == "false" ]]; then
+            if [[ "$TODAY_EPOCH" -lt "$PUBLISH_AFTER_EPOCH" && "$PRIVATE" == "false" ]]; then
               echo "Repository is public too early - reverting to private"
 
               curl -s -X PATCH \
@@ -85,7 +81,7 @@ jobs:
             # --- CASE 2: repo should be public and is private ---
             if [[ "$PRIVATE" == "true" ]]; then
               echo "Repository is private - checking if it should be public"
-              if [[ "$TODAY" -ge "$PUBLISH_AFTER" ]]; then
+              if [[ "$TODAY_EPOCH" -ge "$PUBLISH_AFTER_EPOCH" ]]; then
                 echo "Making repository public"
 
                 curl -s -X PATCH \
