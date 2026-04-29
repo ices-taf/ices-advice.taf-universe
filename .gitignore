@@ -1,0 +1,10 @@
+
+.devcontainer/
+
+.vscode/
+
+.Rprofile
+
+renv.lock
+
+renv/

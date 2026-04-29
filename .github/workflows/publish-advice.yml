@@ -1,0 +1,106 @@
+name: Publish advice registry
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - repos.json
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Publish advice sets
+        env:
+          TOKEN: ${{ secrets.CROSS_ORG_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          auth() {
+            echo "https://x-access-token:${TOKEN}@github.com/$1/$2.git"
+          }
+
+          jq -c '.sets[]' repos.json | while read set; do
+            REPO_NAME=$(echo "$set" | jq -r '.repo_name')
+            ORG_SRC=$(echo "$set" | jq -r '.org_source')
+            ORG_TGT=$(echo "$set" | jq -r '.org_target')
+            YEAR=$(echo "$set" | jq -r '.year')
+            SAFE=$(echo "$set" | jq -r '.safe')
+            RUN=$(echo "$set" | jq -r '.run')
+
+            echo "::group::Publishing $REPO_NAME"
+
+            WKDIR=$(mktemp -d)
+            cd "$WKDIR"
+
+            jq -c '.repos[]' <<<"$set" | while read r; do
+              NAME=$(echo "$r" | jq -r '.name')
+              SUBDIR=$(echo "$r" | jq -r '.subdir')
+
+              git clone "$(auth "$ORG_SRC" "$NAME")"
+
+              # de-git
+              rm -rf "$NAME/.git" "$NAME/.gitignore"
+
+              # subdir flattening
+              if [[ -n "$SUBDIR" ]]; then
+                for d in "$NAME"/*; do
+                  [[ "$(basename "$d")" == "$SUBDIR" ]] || rm -rf "$d"
+                done
+                cp -R "$NAME/$SUBDIR/"* "$NAME/"
+                rm -rf "$NAME/$SUBDIR"
+              fi
+
+              # clear data/results
+              REMOVE=(data model report output)
+              if [[ "$SAFE" == "true" ]]; then
+                REMOVE+=(bootstrap/initial boot/initial boot/data boot/software)
+              fi
+              for d in "${REMOVE[@]}"; do
+                rm -rf "$NAME/$d"
+              done
+
+              # remove non boot/bootstrap dirs
+              find "$NAME" -mindepth 1 -maxdepth 1 -type d \
+                ! -name "boot" ! -name "bootstrap" -exec rm -rf {} +
+
+              # keep only code + license
+              find "$NAME" -maxdepth 1 -type f \
+                ! -name "*.R" ! -name "*.r" \
+                ! -name "*.md" ! -name "*.Rmd" \
+                ! -name "*.Rnw" ! -name "*.tex" \
+                ! -name "LICENSE" ! -name "LICENCE" \
+                -delete
+            done
+
+            # optional run block (exact analogue)
+            if [[ "$RUN" == "true" && "$SAFE" != "true" ]]; then
+              for d in */; do
+                (cd "$d" && Rscript -e 'icesTAF::taf.boot(); icesTAF::source.all()')
+                printf "/boot/library/\n/boot/data/\n/model/\n.gitignore\n" > "$d/.gitignore"
+              done
+            fi
+
+            # create single-commit repo
+            git init
+            git checkout --orphan main
+            git config user.name "ices-github-bot"
+            git config user.email "github@ices.dk"
+            git add .
+            git commit -m "advice $YEAR"
+
+            git remote add origin "$(auth "$ORG_TGT" "$REPO_NAME")"
+            git push --force --set-upstream origin main
+
+            cd /
+            rm -rf "$WKDIR"
+
+            echo "::endgroup::"
+          done
