@@ -41,11 +41,6 @@ jobs:
 
             echo "::group::Checking $ORG/$REPO_NAME"
 
-            if [[ "$TODAY" < "$PUBLISH_AFTER" ]]; then
-              echo "Not yet public: $TODAY < $PUBLISH_AFTER"
-              echo "::endgroup::"
-              continue
-            fi
 
             HTTP_STATUS=$(curl -s -o response.json -w "%{http_code}" \
               -H "Authorization: Bearer $GH_TOKEN" \
@@ -59,24 +54,43 @@ jobs:
             fi
 
             VISIBILITY=$(jq -r '.private' response.json)
+            TODAY=$(date -u +%Y-%m-%d)
 
-            if [[ "$VISIBILITY" == "false" ]]; then
-              echo "Repository already public"
-              echo "$ORG/$REPO_NAME" >> already_public_repos.txt
-              echo "::endgroup::"
+            # --- CASE 1: repo should be private but is public ---
+            if [[ "$TODAY" < "$PUBLISH_AFTER" && "$VISIBILITY" == "false" ]]; then
+              echo "Repository is public too early - reverting to private"
+
+              curl -s -X PATCH \
+                -H "Authorization: Bearer $GH_TOKEN" \
+                -H "Accept: application/vnd.github+json" \
+                https://api.github.com/repos/$ORG/$REPO_NAME \
+                -d '{"private": true}'
+
+              echo "$ORG/$REPO_NAME" >> reverted_to_private.txt
               continue
             fi
 
-            echo "Making repository public..."
+            # --- CASE 2: repo should be public and is private ---
+            if [[ "$TODAY" >= "$PUBLISH_AFTER" && "$VISIBILITY" == "true" ]]; then
+              echo "Making repository public"
 
-            curl -s -X PATCH \
-              -H "Authorization: Bearer $GH_TOKEN" \
-              -H "Accept: application/vnd.github+json" \
-              https://api.github.com/repos/$ORG/$REPO_NAME \
-              -d '{"private": false}'
+              curl -s -X PATCH \
+                -H "Authorization: Bearer $GH_TOKEN" \
+                -H "Accept: application/vnd.github+json" \
+                https://api.github.com/repos/$ORG/$REPO_NAME \
+                -d '{"private": false}'
 
-            echo "$ORG/$REPO_NAME" >> published_repos.txt
-            echo "✅ $ORG/$REPO_NAME is now public"
+              echo "$ORG/$REPO_NAME" >> published_repos.txt
+              continue
+            fi
+
+            # --- CASE 3: already in correct state ---
+            if [[ "$VISIBILITY" == "false" ]]; then
+              echo "$ORG/$REPO_NAME" >> already_public_repos.txt
+            else
+              echo "$ORG/$REPO_NAME" >> already_private_repos.txt
+            fi
+
             echo "::endgroup::"
           done
 
@@ -86,8 +100,9 @@ jobs:
           WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
         shell: bash
         run: |
-          NEW_SECTION=""
-          OLD_SECTION=""
+          PUBLIC_SECTION=""
+          ALREADY_PUBLIC_SECTION=""
+          REVERTED_SECTION=""
           WARNING_SECTION=""
 
           if [ -f pat_status.txt ]; then
@@ -95,25 +110,36 @@ jobs:
           fi
 
           if [ -f published_repos.txt ]; then
-            NEW_LIST=$(sort -u published_repos.txt | awk '{print "- https://github.com/" $0}')
-            if [ -n "$NEW_LIST" ]; then
-              NEW_SECTION=$(printf "**✅ Newly published repositories:**\n\n%s\n\n" "$NEW_LIST")
+            PUBLIC_LIST=$(sort -u published_repos.txt | awk '{print "- https://github.com/" $0}')
+            if [ -n "$PUBLIC_LIST" ]; then
+              PUBLIC_SECTION=$(printf "**✅ Newly published repositories:**\n\n%s\n\n" "$PUBLIC_LIST")
             fi
           fi
 
           if [ -f already_public_repos.txt ]; then
-            OLD_LIST=$(sort -u already_public_repos.txt | awk '{print "- https://github.com/" $0}')
-            if [ -n "$OLD_LIST" ]; then
-              OLD_SECTION=$(printf "**ℹ️ Repositories already public:**\n\n%s\n\n" "$OLD_LIST")
+            ALREADY_PUBLIC_LIST=$(sort -u already_public_repos.txt | awk '{print "- https://github.com/" $0}')
+            if [ -n "$ALREADY_PUBLIC_LIST" ]; then
+              ALREADY_PUBLIC_SECTION=$(printf "**ℹ️ Repositories already public:**\n\n%s\n\n" "$ALREADY_PUBLIC_LIST")
             fi
           fi
 
-          if [ -z "$WARNING_SECTION" ] && [ -z "$NEW_SECTION" ] && [ -z "$OLD_SECTION" ]; then
+          if [ -f reverted_to_private.txt ]; then
+            REVERTED_LIST=$(sort -u reverted_to_private.txt | awk '{print "- https://github.com/" $0}')
+            if [ -n "$REVERTED_LIST" ]; then
+              REVERTED_SECTION=$(printf "🔒 **Repositories reverted to private (early publication):**\n\n%s\n\n" "$REVERTED_LIST")
+            fi
+          fi
+
+          if [ -z "$WARNING_SECTION" ] && [ -z "$PUBLIC_SECTION" ] && [ -z "$REVERTED_SECTION" ] && [ -z "$ALREADY_PUBLIC_SECTION" ]; then
             echo "Nothing to report"
             exit 0
           fi
 
-          MESSAGE=$(printf "%s%s%s" "$WARNING_SECTION" "$NEW_SECTION" "$OLD_SECTION")
+          MESSAGE=$(printf "%s%s%s%s" \
+            "$WARNING_SECTION" \
+            "$PUBLIC_SECTION" \
+            "$REVERTED_SECTION" \
+            "$ALREADY_PUBLIC_SECTION")
 
           payload=$(jq -n \
             --arg date "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
