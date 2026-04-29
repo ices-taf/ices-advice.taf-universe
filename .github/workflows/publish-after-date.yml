@@ -79,45 +79,41 @@ jobs:
           WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
         shell: bash
         run: |
-          NEW=""
-          OLD=""
+          NEW_SECTION=""
+          OLD_SECTION=""
 
           if [ -f published_repos.txt ]; then
-            NEW=$(sort -u published_repos.txt | awk '{print "- https://github.com/" $0}')
+            NEW_LIST=$(sort -u published_repos.txt | awk '{print "- https://github.com/" $0}')
+            if [ -n "$NEW_LIST" ]; then
+              NEW_SECTION="**✅ Newly published repositories:**\n\n$NEW_LIST\n"
+            fi
           fi
 
           if [ -f already_public_repos.txt ]; then
-            OLD=$(sort -u already_public_repos.txt | awk '{print "- https://github.com/" $0}')
+            OLD_LIST=$(sort -u already_public_repos.txt | awk '{print "- https://github.com/" $0}')
+            if [ -n "$OLD_LIST" ]; then
+              OLD_SECTION="**ℹ️ Repositories already public:**\n\n$OLD_LIST\n"
+            fi
           fi
 
-          if [ -z "$NEW" ] && [ -z "$OLD" ]; then
+          if [ -z "$NEW_SECTION" ] && [ -z "$OLD_SECTION" ]; then
             echo "No repositories to report"
             exit 0
           fi
 
+          MESSAGE="${NEW_SECTION}\n${OLD_SECTION}"
+
           payload=$(jq -n \
             --arg date "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-            --arg new "$NEW" \
-            --arg old "$OLD" \
+            --arg msg "$MESSAGE" \
             '{
               "@type": "MessageCard",
               "@context": "https://schema.org/extensions",
               "summary": "Advice repository publish summary",
               "themeColor": "2EB886",
               "title": "📢 Advice repository publish summary",
+              "text": $msg,
               "sections": [
-                {
-                  "text": ( $new | length > 0
-                    ? "**✅ Newly published repositories:**\n\n" + $new
-                    : "" ),
-                  "markdown": true
-                },
-                {
-                  "text": ( $old | length > 0
-                    ? "**ℹ️ Repositories already public:**\n\n" + $old
-                    : "" ),
-                  "markdown": true
-                },
                 {
                   "facts": [
                     { "name": "Checked at (UTC)", "value": $date }
