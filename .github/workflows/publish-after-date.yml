@@ -1,4 +1,4 @@
-name: Publish advice repositories after release date
+name: Publish advice on release date
 
 on:
   workflow_dispatch:
@@ -54,6 +54,7 @@ jobs:
 
             if [[ "$VISIBILITY" == "false" ]]; then
               echo "Repository already public"
+              echo "$ORG/$REPO_NAME" >> already_public_repos.txt
               echo "::endgroup::"
               continue
             fi
@@ -71,41 +72,54 @@ jobs:
             echo "::endgroup::"
           done
 
-      - name: Notify Teams
+      - name: Notify Teams (publish summary)
         if: always()
         env:
           WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
         shell: bash
         run: |
-          if [ ! -f published_repos.txt ]; then
-            echo "No repositories published in this run"
-            exit 0
+          NEW=""
+          OLD=""
+
+          if [ -f published_repos.txt ]; then
+            NEW=$(sort -u published_repos.txt | awk '{print "- https://github.com/" $0}')
           fi
 
-          REPOS=$(sort -u published_repos.txt)
-
-          if [ -z "$REPOS" ]; then
-            echo "Published file empty — nothing to notify"
-            exit 0
+          if [ -f already_public_repos.txt ]; then
+            OLD=$(sort -u already_public_repos.txt | awk '{print "- https://github.com/" $0}')
           fi
 
-          # Convert list to markdown bullets
-          BULLETS=$(echo "$REPOS" | sed 's/^/- /')
+          if [ -z "$NEW" ] && [ -z "$OLD" ]; then
+            echo "No repositories to report"
+            exit 0
+          fi
 
           payload=$(jq -n \
             --arg date "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-            --arg repos "$BULLETS" \
+            --arg new "$NEW" \
+            --arg old "$OLD" \
             '{
               "@type": "MessageCard",
               "@context": "https://schema.org/extensions",
-              "summary": "Advice repositories published",
+              "summary": "Advice repository publish summary",
               "themeColor": "2EB886",
-              "title": "🚀 Advice repositories published",
-              "text": ("The following repositories have been made public:\n\n" + $repos),
+              "title": "📢 Advice repository publish summary",
               "sections": [
                 {
+                  "text": ( $new | length > 0
+                    ? "**✅ Newly published repositories:**\n\n" + $new
+                    : "" ),
+                  "markdown": true
+                },
+                {
+                  "text": ( $old | length > 0
+                    ? "**ℹ️ Repositories already public:**\n\n" + $old
+                    : "" ),
+                  "markdown": true
+                },
+                {
                   "facts": [
-                    { "name": "Published at (UTC)", "value": $date }
+                    { "name": "Checked at (UTC)", "value": $date }
                   ]
                 }
               ]
