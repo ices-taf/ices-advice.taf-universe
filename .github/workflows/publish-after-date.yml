@@ -1,4 +1,4 @@
-name: Publish advice on release date
+name: Make repos public on release date
 
 on:
   workflow_dispatch:
@@ -8,7 +8,7 @@ on:
   push:
     paths:
       - repos.json
-      - publish-after-date.yml
+      - .github/workflows/publish-after-date.yml
 
 jobs:
   publish-visibility:
