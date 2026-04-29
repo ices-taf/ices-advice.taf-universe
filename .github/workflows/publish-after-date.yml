@@ -156,7 +156,7 @@ jobs:
             exit 0
           fi
 
-          MESSAGE=$(printf "%s\n%s\n%s\n%s" \
+          MESSAGE=$(printf "%s\n\n\n%s\n\n\n%s\n\n\n%s" \
             "$WARNING_SECTION" \
             "$PUBLIC_SECTION" \
             "$REVERTED_SECTION" \
