@@ -5,6 +5,9 @@ on:
   schedule:
     # Runs daily at 11:59 UTC
     - cron: '59 11 * * *'
+  push:
+    paths:
+      - repos.json
 
 jobs:
   publish-visibility:
