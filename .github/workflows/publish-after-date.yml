@@ -28,12 +28,12 @@ jobs:
         run: |
           set -euo pipefail
 
-          jq -c '.sets[] | select(.publish_after != null and .publish_after != "")' repos.json \
+          jq -c '.sets[] | select(.publish_after_utc != null and .publish_after_utc != "")' repos.json \
           | while read -r set; do
 
             REPO_NAME=$(jq -r '.repo_name' <<<"$set")
             ORG=$(jq -r '.org_target' <<<"$set")
-            PUBLISH_AFTER_RAW=$(jq -r '.publish_after' <<<"$set")
+            PUBLISH_AFTER_RAW=$(jq -r '.publish_after_utc' <<<"$set")
 
             PUBLISH_AFTER_EPOCH=$(date -ud "$PUBLISH_AFTER_RAW" +%s)
             TODAY_EPOCH=$(date -u +%s)
