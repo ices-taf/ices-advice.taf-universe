@@ -202,13 +202,13 @@ jobs:
                   # remove everything else (files and directories)
                   rm -rf "$item"
                 done
-              )
 
-              if find . -type d ! -name '.' | grep -q .; then
-                echo "ERROR: unexpected directories remain in $SRC_REPO after cleaning"
-                find . -type d
-                exit 1
-              fi
+                 if find . -type d ! -name '.' | grep -q .; then
+                  echo "ERROR: unexpected directories remain in $SRC_REPO after cleaning"
+                  find . -type d
+                  exit 1
+                fi
+              )
             done < <(jq -c '.repos[]' <<<"$set")
 
             # --- single snapshot commit ---
