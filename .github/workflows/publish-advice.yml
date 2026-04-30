@@ -48,7 +48,7 @@ jobs:
               > "$MANIFEST_FILE"
           fi
 
-          # TEST MODE: first set only
+          # Loop through sets
           while read -r set; do
             ORG_TARGET=$(jq -r '.org_target' <<<"$set")
             TARGET_REPO=$(jq -r '.repo_name' <<<"$set")
@@ -120,15 +120,44 @@ jobs:
             # --- pull in source repositories as folders ---
             while read -r repo; do
               SRC_REPO=$(jq -r '.name' <<<"$repo")
+              SUBFOLDER=$(jq -r '.subdir // empty' <<<"$repo")
               SAFE=$(jq -r '.safe // false' <<<"$repo")
+
+              if [ "$SUBFOLDER" = "." ]; then
+                echo "ERROR: subfolder '.' is not allowed"
+                exit 1
+              fi
+
+              if [[ "$SUBFOLDER" == *".."* ]]; then
+                echo "ERROR: invalid subfolder path"
+                exit 1
+              fi
 
               echo "Adding $SRC_ORG/$SRC_REPO"
 
               git clone --depth 1 \
                 "https://x-access-token:$GH_TOKEN@github.com/$SRC_ORG/$SRC_REPO.git" \
-                "$SRC_REPO"
+                ".src_tmp"
 
-              rm -rf "$SRC_REPO/.git"
+              # prepare final registry folder
+              mkdir -p "$SRC_REPO"
+
+              if [ -n "$SUBFOLDER" ]; then
+                echo "Extracting subfolder '$SUBFOLDER' from $SRC_REPO"
+
+                if [ ! -d ".src_tmp/$SUBFOLDER" ]; then
+                  echo "ERROR: subfolder '$SUBFOLDER' not found in $SRC_REPO"
+                  exit 1
+                fi
+
+                cp -R ".src_tmp/$SUBFOLDER/." "$SRC_REPO/"
+              else
+                echo "Using full repo contents for $SRC_REPO"
+                cp -R ".src_tmp/." "$SRC_REPO/"
+              fi
+
+              rm -rf ".src_tmp/$SRC_REPO/.git" 2>/dev/null || true
+              rm -rf ".src_tmp"
 
               echo "Cleaning $SRC_REPO"
               (
