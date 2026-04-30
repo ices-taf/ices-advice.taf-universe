@@ -7,11 +7,9 @@
       "publish_after_utc": "2026-04-30 10:00",
       "repos": [
         {
-          "name": "2026_her.27.6aS7bc_assessment",
-          "subdir": ""
+          "name": "2026_her.27.6aS7bc_assessment"
         }
       ],
-      "year": 2026,
       "safe": false,
       "run": false
     },
@@ -22,11 +20,9 @@
       "publish_after_utc": "2026-04-30 10:00",
       "repos": [
         {
-          "name": "2026_her.27.irls_assessment",
-          "subdir": ""
+          "name": "2026_her.27.irls_assessment"
         }
       ],
-      "year": 2026,
       "safe": false,
       "run": false
     },
@@ -37,11 +33,9 @@
       "publish_after_utc": "2026-04-30 10:00",
       "repos": [
         {
-          "name": "2026_spr.27.7de_assessment",
-          "subdir": ""
+          "name": "2026_spr.27.7de_assessment"
         }
       ],
-      "year": 2026,
       "safe": false,
       "run": false
     },
@@ -52,11 +46,9 @@
       "publish_after_utc": "2026-04-30 10:00",
       "repos": [
         {
-          "name": "2026_her.27.3a47d_assessment",
-          "subdir": ""
+          "name": "2026_her.27.3a47d_assessment"
         }
       ],
-      "year": 2026,
       "safe": false,
       "run": false
     },
@@ -67,11 +59,9 @@
       "publish_after_utc": "2026-04-30 10:00",
       "repos": [
         {
-          "name": "2026_spr.27.3a4_assessment",
-          "subdir": ""
+          "name": "2026_spr.27.3a4_assessment"
         }
       ],
-      "year": 2026,
       "safe": false,
       "run": false
     }

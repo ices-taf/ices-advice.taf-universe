@@ -5,7 +5,6 @@ on:
   push:
     paths:
       - repos.json
-      - published_commits.json
       - .github/workflows/publish-advice.yml
 
 jobs:
@@ -163,50 +162,53 @@ jobs:
               (
                 cd "$SRC_REPO"
 
-                # clear out data
-                dirs_to_clean=("data" "model" "report" "output")
-
-                if [ "$SAFE" = "true" ]; then
-                  dirs_to_clean+=(
-                    "bootstrap/initial"
-                    "bootstrap/data"
-                    "bootstrap/software"
-                    "boot/initial"
-                    "boot/data"
-                    "boot/software"
-                  )
-                fi
-
-                for dir in "${dirs_to_clean[@]}"; do
-                  rm -rf "$dir"
-                done
-
-                # if they havnt been remove, keep these directories
-                keep_dirs=("boot" "bootstrap" "data" "model" "report" "output")
-                keep_files=("LICENSE" "LICENCE")
-
                 shopt -s nullglob
 
+                ############################################
+                # 1. Clean boot/ and bootstrap/
+                ############################################
+
+                for top in boot bootstrap; do
+                  if [ -d "$top" ]; then
+                    for item in "$top"/*; do
+                      # keep only *.R and *.bib at top level
+                      if [[ -f "$item" && "$item" =~ \.(R|r|bib)$ ]]; then
+                        continue
+                      fi
+
+                      # remove everything else (dirs + other files)
+                      rm -rf "$item"
+                    done
+                  fi
+                done
+
+                ############################################
+                # 2. Clean repository root
+                ############################################
+
+                keep_root_regex='\.(R|r|bib|tex|Rnw|Rmd|qmd|md)$'
+
                 for item in *; do
-                  # skip directories we keep
-                  if [ -d "$item" ] && [[ " ${keep_dirs[*]} " == *" $item "* ]]; then
+                  # keep LICENSE / LICENCE
+                  if [[ "$item" == "LICENSE" || "$item" == "LICENCE" ]]; then
                     continue
                   fi
 
-                  # skip LICENSE / LICENCE
-                  if [[ " ${keep_files[*]} " == *" $item "* ]]; then
+                  # keep allowed source files
+                  if [[ -f "$item" && "$item" =~ $keep_root_regex ]]; then
                     continue
                   fi
 
-                  # keep recognised source files
-                  if [[ "$item" =~ \.(r|R|md|Rmd|Rnw|tex)$ ]]; then
-                    continue
-                  fi
-
-                  # remove everything else
+                  # remove everything else (files and directories)
                   rm -rf "$item"
                 done
               )
+
+              if find . -type d ! -name '.' | grep -q .; then
+                echo "ERROR: unexpected directories remain in $SRC_REPO after cleaning"
+                find . -type d
+                exit 1
+              fi
             done < <(jq -c '.repos[]' <<<"$set")
 
             # --- single snapshot commit ---
