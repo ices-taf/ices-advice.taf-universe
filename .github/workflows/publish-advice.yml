@@ -1,23 +1,82 @@
-name: Publish advice registry
+name: Publish repositories to registry
 
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - repos.json
+      - .github/workflows/publish-to-registry.yml
 
 jobs:
-  publish:
+  publish-registry:
     runs-on: ubuntu-latest
 
+    env:
+      GH_TOKEN: ${{ secrets.CROSS_ORG_TOKEN }}
+
     steps:
-      - name: Checkout registry repository
+      - name: Checkout workflow repository
         uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
 
-      - name: Install jq
-        run: sudo apt-get update && sudo apt-get install -y jq
-
-      - name: Ensure publish_state.json exists
+      - name: Configure git
         run: |
-          if [ ! -f publish_state.json ]; then
-            echo '{"generated": "", "sets": {}}' > publish_state.json
-          fi
+          git config --global user.name "ices-github-bot"
+          git config --global user.email "taf@ices.dk"
+
+      - name: Install jq and gh
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq
+          gh --version
+
+      - name: Publish sets to registry (single commit, force push)
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          jq -c '.sets[0:1][]' repos.json | while read -r set; do
+            ORG_TARGET=$(jq -r '.org_target' <<<"$set")
+            TARGET_REPO=$(jq -r '.repo_name' <<<"$set")
+            SRC_ORG=$(jq -r '.org_source' <<<"$set")
+
+            echo "::group::Publishing $ORG_TARGET/$TARGET_REPO"
+
+            WORKDIR=$(mktemp -d)
+            cd "$WORKDIR"
+
+            # --- initialise fresh git repo ---
+            mkdir registry
+            cd registry
+            git init
+            git checkout -B main
+
+            # --- pull in source repositories as folders ---
+            jq -c '.repos[]' <<<"$set" | while read -r repo; do
+              SRC_REPO=$(jq -r '.name' <<<"$repo")
+
+              echo "Adding $SRC_ORG/$SRC_REPO"
+
+              git clone --depth 1 \
+                "https://x-access-token:$GH_TOKEN@github.com/$SRC_ORG/$SRC_REPO.git" \
+                "$SRC_REPO"
+
+              rm -rf "$SRC_REPO/.git"
+            done
+
+            # --- single snapshot commit ---
+            git add .
+            git commit -m "Advice ($(date -u +%Y))"
+
+            # --- ensure target repo exists ---
+            if ! gh repo view "$ORG_TARGET/$TARGET_REPO" >/dev/null 2>&1; then
+              gh repo create "$ORG_TARGET/$TARGET_REPO" --private --confirm
+            fi
+
+            # --- force push single commit ---
+            git remote add origin \
+              "https://x-access-token:$GH_TOKEN@github.com/$ORG_TARGET/$TARGET_REPO.git"
+
+            git push --force origin main
+
+            echo "::endgroup::"
+          done
