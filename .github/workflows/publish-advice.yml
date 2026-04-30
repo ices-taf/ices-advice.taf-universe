@@ -77,9 +77,9 @@ jobs:
 
               git clone --depth 1 \
                 "https://x-access-token:$GH_TOKEN@github.com/$SRC_ORG/$SRC_REPO.git" \
-                "$SRC_REPO"
+                ".src_tmp"
 
-              COMMIT_SHA=$(cd "$SRC_REPO" && git rev-parse HEAD)
+              COMMIT_SHA=$(cd ".src_tmp" && git rev-parse HEAD)
 
               PREV_SHA=$(jq -r \
                 --arg set "$SET_KEY" \
@@ -99,7 +99,7 @@ jobs:
                 '. + { ($key): $val }' \
                 "$CURRENT_SOURCES_FILE" > .tmp.json && mv .tmp.json "$CURRENT_SOURCES_FILE"
 
-              rm -rf "$SRC_REPO"
+              rm -rf ".src_tmp"
             done < <(jq -c '.repos[]' <<<"$set")
 
             if [ "$CHANGED" != "true" ]; then
@@ -139,7 +139,7 @@ jobs:
                 ".src_tmp"
 
               # remove git metadata
-              rm -rf ".src_tmp/$SRC_REPO/.git" 2>/dev/null || true
+              rm -rf ".src_tmp/.git" 2>/dev/null || true
 
               # prepare final registry folder
               mkdir -p "$SRC_REPO"
