@@ -37,6 +37,9 @@ jobs:
 
           MANIFEST_FILE="$GITHUB_WORKSPACE/published_commits.json"
 
+          PUBLISHED_SETS_FILE="$GITHUB_WORKSPACE/.published_sets.txt"
+          : > "$PUBLISHED_SETS_FILE"
+
           # Initialise manifest if missing
           if [ ! -f "$MANIFEST_FILE" ]; then
             jq -n \
@@ -190,6 +193,8 @@ jobs:
 
             git push --force origin main
 
+            echo "$SET_KEY" >> "$PUBLISHED_SETS_FILE"
+
             # --- update manifest ---
             jq \
               --arg set "$SET_KEY" \
@@ -218,3 +223,40 @@ jobs:
           else
             echo "No manifest changes to commit"
           fi
+
+      - name: Notify Teams of published registries
+        if: always()
+        shell: bash
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
+        run: |
+          set -euo pipefail
+
+          PUBLISHED_SETS_FILE=".published_sets.txt"
+
+          if [ ! -f "$PUBLISHED_SETS_FILE" ] || [ ! -s "$PUBLISHED_SETS_FILE" ]; then
+            echo "No registries published - skipping Teams notification"
+            exit 0
+          fi
+
+          LIST=$(sort -u "$PUBLISHED_SETS_FILE" | awk '{print "- https://github.com/" $0}')
+
+          MESSAGE=$(printf "**✅ Advice code published or updated**\n\n%s\n\n_Checked at %s (UTC)_" \
+            "$LIST" \
+            "$(date -u +%Y-%m-%dT%H:%M:%SZ)")
+
+          payload=$(jq -n \
+            --arg msg "$MESSAGE" \
+            '{
+              "@type": "MessageCard",
+              "@context": "https://schema.org/extensions",
+              "summary": "Advice code update",
+              "themeColor": "2EB886",
+              "title": "📢 Advice code update",
+              "text": $msg
+            }')
+
+          curl -s -X POST \
+            -H "Content-Type: application/json" \
+            -d "$payload" \
+            "$TEAMS_WEBHOOK_URL"
