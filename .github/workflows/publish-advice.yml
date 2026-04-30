@@ -39,6 +39,9 @@ jobs:
           PUBLISHED_SETS_FILE="$GITHUB_WORKSPACE/.published_sets.txt"
           : > "$PUBLISHED_SETS_FILE"
 
+          FAILED_SETS_FILE="$GITHUB_WORKSPACE/.failed_sets.txt"
+          : > "$FAILED_SETS_FILE"
+
           # Initialise manifest if missing
           if [ ! -f "$MANIFEST_FILE" ]; then
             jq -n \
@@ -49,9 +52,9 @@ jobs:
 
           # Loop through sets
           while read -r set; do
-            ORG_TARGET=$(jq -r '.org_target' <<<"$set")
+            SRC_ORG=$(jq -r '.org_source // "ices-taf"' <<<"$set")
+            ORG_TARGET=$(jq -r '.org_target // "ices-advice"' <<<"$set")
             TARGET_REPO=$(jq -r '.repo_name' <<<"$set")
-            SRC_ORG=$(jq -r '.org_source' <<<"$set")
             SET_KEY="$ORG_TARGET/$TARGET_REPO"
 
             echo "::group::Evaluating set $SET_KEY"
@@ -223,9 +226,17 @@ jobs:
                 # 4. Check for unexpected directories
                 ############################################
 
-                if find . -type d ! -name '.' | grep -q .; then
-                  echo "ERROR: unexpected directories remain in $SRC_REPO after cleaning"
-                  find . -type d
+                UNEXPECTED_DIRS=$(find . -type d \
+                  ! -path '.' \
+                  ! -path './boot' \
+                  ! -path './bootstrap')
+
+                if [ -n "$UNEXPECTED_DIRS" ]; then
+                  echo "WARNING: unexpected directories remain in $SRC_REPO after cleaning"
+                  echo "$UNEXPECTED_DIRS"
+
+                  echo "$SET_KEY: unexpected directories after cleaning" >> "$FAILED_SETS_FILE"
+
                   exit 1
                 fi
               )
@@ -286,16 +297,29 @@ jobs:
           set -euo pipefail
 
           PUBLISHED_SETS_FILE=".published_sets.txt"
+          FAILED_SETS_FILE=".failed_sets.txt"
 
-          if [ ! -f "$PUBLISHED_SETS_FILE" ] || [ ! -s "$PUBLISHED_SETS_FILE" ]; then
-            echo "No registries published - skipping Teams notification"
+          PUBLISHED_SECTION=""
+          FAILED_SECTION=""
+
+          if [ -f "$PUBLISHED_SETS_FILE" ] && [ -s "$PUBLISHED_SETS_FILE" ]; then
+            PUBLISHED_LIST=$(sort -u "$PUBLISHED_SETS_FILE" | awk '{print "- https://github.com/" $0}')
+            PUBLISHED_SECTION=$(printf "**✅ Advice code published or updated**\n\n%s\n\n" "$PUBLISHED_LIST")
+          fi
+
+          if [ -f "$FAILED_SETS_FILE" ] && [ -s "$FAILED_SETS_FILE" ]; then
+            FAILED_LIST=$(sed 's|^|- |' "$FAILED_SETS_FILE")
+            FAILED_SECTION=$(printf "⚠️ **Sets skipped due to cleaning errors**\n\n%s\n\n" "$FAILED_LIST")
+          fi
+
+          if [ -z "$PUBLISHED_SECTION" ] && [ -z "$FAILED_SECTION" ]; then
+            echo "Nothing to report - skipping Teams notification"
             exit 0
           fi
 
-          LIST=$(sort -u "$PUBLISHED_SETS_FILE" | awk '{print "- https://github.com/" $0}')
-
-          MESSAGE=$(printf "**✅ Advice code pushed or updated**\n\n%s\n\n_Checked at %s (UTC)_" \
-            "$LIST" \
+          MESSAGE=$(printf "%s%s_Checked at %s (UTC)_" \
+            "$PUBLISHED_SECTION" \
+            "$FAILED_SECTION" \
             "$(date -u +%Y-%m-%dT%H:%M:%SZ)")
 
           payload=$(jq -n \
