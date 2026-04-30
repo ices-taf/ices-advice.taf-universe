@@ -30,36 +30,36 @@ SOURCE --> MORE{More repos?}
 MORE -->|Yes| LOOP
 MORE -->|No| COMMIT
 
-COMMIT[Commit & force push to GitHub] --> OPEN([Open repo in browser])
+COMMIT[Commit & force push to GitHub]
 ```
 
-An example repositories.json file is:
+An example repos.json file is below:
+
+You can optionally have your TAF folder in a subdirectory of the source repo
+and this can be done by setting the `subdir` feild element of the repos array to something appropriate, `"subdir": "my_assessment"` for example. Another option is to set `"safe": "true"` which is interpreted as meaning your `boot/initial/data` folder is safe to publish for that repo. Unfortunately the `"run"` feild is forced to `false` currently.
 
 ```json
 [
   {
-    "repo_name": "2026_san.sa.1r",
-    "repos": ["2026_san.sa.1r_assessment"],
-    "subdir": [""],
-    "year": 2026,
-    "safe": true,
-    "run": false
+    "repo_name": "2026_her.27.6aS7bc",
+    "publish_after_utc": "2026-04-30 10:00",
+    "repos": [
+      {
+        "name": "2026_her.27.6aS7bc_assessment"
+      }
+    ]
   },
   {
-    "repo_name": "2026_san.sa.2r",
-    "repos": ["2026_san.sa.2r_assessment"],
-    "subdir": [""],
-    "year": 2026,
-    "safe": true,
-    "run": false
-  },
-  {
-    "repo_name": "2026_san.sa.3r",
-    "repos": ["2026_san.sa.3r_assessment"],
-    "subdir": [""],
-    "year": 2026,
-    "safe": true,
-    "run": false
+    "repo_name": "2026_her.27.irls",
+    "publish_after_utc": "2026-04-30 10:00",
+    "repos": [
+      {
+        "name": "2026_her.27.irls_assessment",
+        "run": false,
+        "safe": true,
+        "subdir": "taf_code"
+      }
+    ]
   }
 ]
 ```

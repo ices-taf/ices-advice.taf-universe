@@ -275,7 +275,7 @@ jobs:
             mv "$MANIFEST_FILE.next" "$MANIFEST_FILE"
 
             echo "::endgroup::"
-          done < <(jq -c '.sets[]' repos.json)
+          done < <(jq -c '.[]' repos.json)
 
       - name: Commit updated published_commits.json
         shell: bash

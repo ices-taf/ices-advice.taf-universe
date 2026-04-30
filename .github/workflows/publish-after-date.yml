@@ -28,7 +28,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          jq -c '.sets[] | select(.publish_after_utc != null and .publish_after_utc != "")' repos.json \
+          jq -c '.[] | select(.publish_after_utc != null and .publish_after_utc != "")' repos.json \
           | while read -r set; do
 
             REPO_NAME=$(jq -r '.repo_name' <<<"$set")
@@ -114,7 +114,7 @@ jobs:
           if [ ! -f published_repos.txt ] && \
             [ ! -f reverted_to_private.txt ] && \
             [ ! -f pat_status.txt ]; then
-            echo "All repositories already public – no notification sent"
+            echo "All repositories already public - no notification sent"
             exit 0
           fi
 
