@@ -2,10 +2,6 @@ name: Publish advice registry
 
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - repos.json
-      - .github/workflows/publish_state.json
 
 jobs:
   publish:
@@ -13,7 +9,7 @@ jobs:
 
     steps:
       - name: Checkout registry repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -24,166 +20,4 @@ jobs:
         run: |
           if [ ! -f publish_state.json ]; then
             echo '{"generated": "", "sets": {}}' > publish_state.json
-          fi
-
-      - name: Publish advice sets (incremental)
-        env:
-          TOKEN: ${{ secrets.CROSS_ORG_TOKEN }}
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          AUTH() {
-            echo "https://username:${TOKEN}@github.com/$1/$2.git"
-          }
-
-          UPDATED=false
-
-          # iterate deterministically without subshells
-          while read -r set; do
-            REPO_NAME=$(jq -r '.repo_name' <<<"$set")
-            ORG_SRC=$(jq -r '.org_source' <<<"$set")
-            ORG_TGT=$(jq -r '.org_target' <<<"$set")
-            YEAR=$(jq -r '.year' <<<"$set")
-
-            echo "::group::Checking $REPO_NAME"
-
-            CHANGED=false
-            declare -A CURRENT_REFS=()
-
-            # resolve refs for all source repos
-            while read -r repo; do
-              NAME=$(jq -r '.name' <<<"$repo")
-              REF=$(jq -r '.ref // "HEAD"' <<<"$repo")
-
-              SHA=$(git ls-remote "$(AUTH "$ORG_SRC" "$NAME")" "$REF" | awk '{print $1}')
-
-              if [[ -z "$SHA" ]]; then
-                echo "ERROR: Unable to resolve $NAME@$REF"
-                exit 1
-              fi
-
-              CURRENT_REFS["$NAME"]="$SHA"
-
-              PREV=$(jq -r \
-                --arg set "$REPO_NAME" \
-                --arg repo "$NAME" \
-                '.sets[$set][$repo] // empty' \
-                publish_state.json)
-
-              if [[ "$SHA" != "$PREV" ]]; then
-                CHANGED=true
-              fi
-            done < <(jq -c '.repos[]' <<<"$set")
-
-            if [[ "$CHANGED" != "true" ]]; then
-              echo "No source changes - skipping publish"
-              echo "::endgroup::"
-              continue
-            fi
-
-            echo "Changes detected - publishing $REPO_NAME"
-
-            # -----------------------------------------------------------------
-            # FULL PUBLISH (same semantics as R script)
-            # -----------------------------------------------------------------
-
-            WKDIR=$(mktemp -d)
-            cd "$WKDIR"
-
-            # clone and clean each repo
-            while read -r repo; do
-              NAME=$(jq -r '.name' <<<"$repo")
-              SUBDIR=$(jq -r '.subdir // ""' <<<"$repo")
-              SAFE=$(jq -r '.safe // true' <<<"$set")
-
-              git clone "$(AUTH "$ORG_SRC" "$NAME")"
-
-              # de-git
-              rm -rf "$NAME/.git" "$NAME/.gitignore"
-
-              # optional subdir flattening
-              if [[ -n "$SUBDIR" ]]; then
-                for d in "$NAME"/*; do
-                  [[ "$(basename "$d")" == "$SUBDIR" ]] || rm -rf "$d"
-                done
-                cp -R "$NAME/$SUBDIR/"* "$NAME/"
-                rm -rf "$NAME/$SUBDIR"
-              fi
-
-              # remove data/results
-              REMOVE=(data model report output)
-              if [[ "$SAFE" == "true" ]]; then
-                REMOVE+=(bootstrap/initial boot/initial boot/data boot/software)
-              fi
-
-              for d in "${REMOVE[@]}"; do
-                rm -rf "$NAME/$d"
-              done
-
-              # remove non boot/bootstrap directories
-              find "$NAME" -mindepth 1 -maxdepth 1 -type d \
-                ! -name "boot" ! -name "bootstrap" -exec rm -rf {} +
-
-              # keep only code + license files
-              find "$NAME" -maxdepth 1 -type f \
-                ! -name "*.R" ! -name "*.r" \
-                ! -name "*.md" ! -name "*.Rmd" \
-                ! -name "*.Rnw" ! -name "*.tex" \
-                ! -name "LICENSE" ! -name "LICENCE" \
-                -delete
-
-            done < <(jq -c '.repos[]' <<<"$set")
-
-            # single-commit repo
-            git init
-            git checkout --orphan main
-            git config user.name "ices-github-bot"
-            git config user.email "github@ices.dk"
-            git add .
-            git commit -m "advice $YEAR"
-
-            git remote add origin "$(AUTH "$ORG_TGT" "$REPO_NAME")"
-            git push --force --set-upstream origin main
-
-            cd /
-            rm -rf "$WKDIR"
-
-            # -----------------------------------------------------------------
-            # UPDATE publish_state.json atomically
-            # -----------------------------------------------------------------
-
-            STATE=$(cat publish_state.json)
-
-            for repo in "${!CURRENT_REFS[@]}"; do
-              STATE=$(jq \
-                --arg set "$REPO_NAME" \
-                --arg repo "$repo" \
-                --arg sha "${CURRENT_REFS[$repo]}" \
-                '.sets[$set][$repo] = $sha' <<<"$STATE")
-            done
-
-            echo "$STATE" > publish_state.json
-            UPDATED=true
-
-            echo "::endgroup::"
-
-          done < <(jq -c '.sets[]' repos.json)
-
-          if [[ "$UPDATED" == "true" ]]; then
-            jq '.generated = now | strftime("%Y-%m-%dT%H:%M:%SZ")' publish_state.json \
-              > publish_state.json.tmp
-            mv publish_state.json.tmp publish_state.json
-          fi
-
-      - name: Commit publish_state.json
-        run: |
-          git config user.name "ices-github-bot"
-          git config user.email "github@ices.dk"
-          git add publish_state.json
-          if git diff --cached --quiet; then
-            echo "No publish state changes to commit"
-          else
-            git commit -m "Update publish state"
-            git push
           fi
