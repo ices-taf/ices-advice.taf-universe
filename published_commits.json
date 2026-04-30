@@ -1,4 +1,35 @@
 {
-  "generated_at_utc": "2026-04-30T11:01:25Z",
-  "sets": {}
+  "generated_at_utc": "2026-04-30T11:41:29Z",
+  "sets": {
+    "ices-advice/2026_her.27.6aS7bc": {
+      "published_at_utc": "2026-04-30T11:41:00Z",
+      "sources": {
+        "ices-taf/2026_her.27.6aS7bc_assessment": "1c4690065f191da9b5985c5e2e31b20c02a70b84"
+      }
+    },
+    "ices-advice/2026_her.27.irls": {
+      "published_at_utc": "2026-04-30T11:41:05Z",
+      "sources": {
+        "ices-taf/2026_her.27.irls_assessment": "941314ddabc2ac1e57bd0e40f25f1788f6935396"
+      }
+    },
+    "ices-advice/2026_spr.27.7de": {
+      "published_at_utc": "2026-04-30T11:41:08Z",
+      "sources": {
+        "ices-taf/2026_spr.27.7de_assessment": "0304f7845c130d54de09dc4b582a4e73d122c0a8"
+      }
+    },
+    "ices-advice/2026_her.27.3a47d": {
+      "published_at_utc": "2026-04-30T11:41:24Z",
+      "sources": {
+        "ices-taf/2026_her.27.3a47d_assessment": "619a53837cfd1b09840faa67ea96b3d18f2f675c"
+      }
+    },
+    "ices-advice/2026_spr.27.3a4": {
+      "published_at_utc": "2026-04-30T11:41:29Z",
+      "sources": {
+        "ices-taf/2026_spr.27.3a4_assessment": "603c492fa33bceb6bd9a7b15cccd07e64e972db9"
+      }
+    }
+  }
 }
