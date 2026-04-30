@@ -33,7 +33,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          jq -c '.sets[0:1][]' repos.json | while read -r set; do
+          jq -c '.sets[]' repos.json | while read -r set; do
             ORG_TARGET=$(jq -r '.org_target' <<<"$set")
             TARGET_REPO=$(jq -r '.repo_name' <<<"$set")
             SRC_ORG=$(jq -r '.org_source' <<<"$set")
