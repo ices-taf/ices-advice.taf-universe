@@ -17,20 +17,6 @@ jobs:
       - name: Checkout workflow repository
         uses: actions/checkout@v5
 
-      - name: Set up R
-        uses: r-lib/actions/setup-r@v2
-        with:
-          extra-repositories: |
-            https://cloud.r-project.org
-            https://ices-tools-prod.r-universe.dev
-            https://packagemanager.posit.co/cran/__linux__/jammy/latest
-
-      - name: Install R dependencies
-        uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-          extra-packages: |
-            any::TAF
-
       - name: Configure git
         run: |
           git config --global user.name "ices-github-bot"
@@ -76,10 +62,9 @@ jobs:
 
               rm -rf "$SRC_REPO/.git"
 
-              echo "Running TAF::clean() in $SRC_REPO"
+              echo "Cleaning $SRC_REPO"
               (
                 cd "$SRC_REPO"
-                Rscript -e 'TAF::clean()'
 
                 # clear out data
                 dirs_to_clean=("data" "model" "report" "output")
@@ -87,6 +72,8 @@ jobs:
                 if [ "$SAFE" = "true" ]; then
                   dirs_to_clean+=(
                     "bootstrap/initial"
+                    "bootstrap/data"
+                    "bootstrap/software",
                     "boot/initial"
                     "boot/data"
                     "boot/software"
@@ -97,6 +84,31 @@ jobs:
                   rm -rf "$dir"
                 done
 
+                # if they havnt been remove, keep these directories
+                keep_dirs=("boot" "bootstrap" "data" "model" "report" "output")
+                keep_files=("LICENSE" "LICENCE")
+
+                shopt -s nullglob
+
+                for item in *; do
+                  # skip directories we keep
+                  if [ -d "$item" ] && [[ " ${keep_dirs[*]} " == *" $item "* ]]; then
+                    continue
+                  fi
+
+                  # skip LICENSE / LICENCE
+                  if [[ " ${keep_files[*]} " == *" $item "* ]]; then
+                    continue
+                  fi
+
+                  # keep recognised source files
+                  if [[ "$item" =~ \.(r|R|md|Rmd|Rnw|tex)$ ]]; then
+                    continue
+                  fi
+
+                  # remove everything else
+                  rm -rf "$item"
+                done
               )
             done
 
