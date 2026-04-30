@@ -138,6 +138,9 @@ jobs:
                 "https://x-access-token:$GH_TOKEN@github.com/$SRC_ORG/$SRC_REPO.git" \
                 ".src_tmp"
 
+              # remove git metadata
+              rm -rf ".src_tmp/$SRC_REPO/.git" 2>/dev/null || true
+
               # prepare final registry folder
               mkdir -p "$SRC_REPO"
 
@@ -155,7 +158,6 @@ jobs:
                 cp -R ".src_tmp/." "$SRC_REPO/"
               fi
 
-              rm -rf ".src_tmp/$SRC_REPO/.git" 2>/dev/null || true
               rm -rf ".src_tmp"
 
               echo "Cleaning $SRC_REPO"
