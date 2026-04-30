@@ -82,5 +82,15 @@
         "name": "2025_tur.27.4_survey"
       }
     ]
+  },
+  {
+    "repo_name": "2025_pil.27.8abd",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_pil.27.8abd_assessment",
+        "subdir": "V3.20b"
+      }
+    ]
   }
 ]
