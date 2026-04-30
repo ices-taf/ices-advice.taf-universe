@@ -70,5 +70,17 @@
         "name": "2026_san.sa.3r_assessment"
       }
     ]
+  },
+  {
+    "repo_name": "2025_tur.27.4",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_tur.27.4_assessment"
+      },
+      {
+        "name": "2025_tur.27.4_survey"
+      }
+    ]
   }
 ]
