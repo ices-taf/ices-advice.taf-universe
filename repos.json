@@ -4,10 +4,70 @@
       "repo_name": "2026_her.27.6aS7bc",
       "org_source": "ices-taf",
       "org_target": "ices-advice",
-      "publish_after": "2026-04-30 10:00",
+      "publish_after_utc": "2026-04-30 10:00",
       "repos": [
         {
           "name": "2026_her.27.6aS7bc_assessment",
+          "subdir": ""
+        }
+      ],
+      "year": 2026,
+      "safe": true,
+      "run": false
+    },
+    {
+      "repo_name": "2026_her.27.irls",
+      "org_source": "ices-taf",
+      "org_target": "ices-advice",
+      "publish_after_utc": "2026-04-30 10:00",
+      "repos": [
+        {
+          "name": "2026_her.27.irls_assessment",
+          "subdir": ""
+        }
+      ],
+      "year": 2026,
+      "safe": true,
+      "run": false
+    },
+    {
+      "repo_name": "2026_spr.27.7de",
+      "org_source": "ices-taf",
+      "org_target": "ices-advice",
+      "publish_after_utc": "2026-04-30 10:00",
+      "repos": [
+        {
+          "name": "2026_spr.27.7de_assessment",
+          "subdir": ""
+        }
+      ],
+      "year": 2026,
+      "safe": true,
+      "run": false
+    },
+    {
+      "repo_name": "2026_her.27.3a47d",
+      "org_source": "ices-taf",
+      "org_target": "ices-advice",
+      "publish_after_utc": "2026-04-30 10:00",
+      "repos": [
+        {
+          "name": "2026_her.27.3a47d_assessment",
+          "subdir": ""
+        }
+      ],
+      "year": 2026,
+      "safe": true,
+      "run": false
+    },
+    {
+      "repo_name": "2026_spr.27.3a4",
+      "org_source": "ices-taf",
+      "org_target": "ices-advice",
+      "publish_after_utc": "2026-04-30 10:00",
+      "repos": [
+        {
+          "name": "2026_spr.27.3a4_assessment",
           "subdir": ""
         }
       ],
