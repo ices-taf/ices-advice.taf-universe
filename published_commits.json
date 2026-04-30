@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-04-30T16:37:29Z",
+  "generated_at_utc": "2026-04-30T16:46:37Z",
   "sets": {
     "ices-advice/2026_her.27.6aS7bc": {
       "published_at_utc": "2026-04-30T16:36:55Z",
@@ -54,6 +54,12 @@
       "sources": {
         "ices-taf/2025_tur.27.4_assessment": "6cdeb96ad717c70c4cb169572b390ea46709ed3d",
         "ices-taf/2025_tur.27.4_survey": "d6b1cf38363fdf39d693fb97a7ca3892b16dc79c"
+      }
+    },
+    "ices-advice/2025_pil.27.8abd": {
+      "published_at_utc": "2026-04-30T16:46:37Z",
+      "sources": {
+        "ices-taf/2025_pil.27.8abd_assessment": "4dbb755729f1fabad23bf814ab659b0f57f2e4f7"
       }
     }
   }
