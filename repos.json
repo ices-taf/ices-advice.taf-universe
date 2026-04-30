@@ -46,7 +46,7 @@
   },
   {
     "repo_name": "2026_san.sa.1r",
-    "publish_after_utc":"2026-02-27 11:00",
+    "publish_after_utc": "2026-02-27 11:00",
     "repos": [
       {
         "name": "2026_san.sa.1r_assessment"
@@ -55,7 +55,7 @@
   },
   {
     "repo_name": "2026_san.sa.2r",
-    "publish_after_utc":"2026-02-27 11:00",
+    "publish_after_utc": "2026-02-27 11:00",
     "repos": [
       {
         "name": "2026_san.sa.2r_assessment"
@@ -64,10 +64,28 @@
   },
   {
     "repo_name": "2026_san.sa.3r",
-    "publish_after_utc":"2026-02-27 11:00",
+    "publish_after_utc": "2026-02-27 11:00",
     "repos": [
       {
         "name": "2026_san.sa.3r_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_whg.27.7a",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_whg.27.7a_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_whb.27.1-91214",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_whb.27.1-91214_assessment"
       }
     ]
   },
@@ -84,12 +102,867 @@
     ]
   },
   {
+    "repo_name": "2025_tur.27.3a",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_tur.27.3a_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_sol.27.8c9a",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_sol.27.8c9a_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_sol.27.7fg",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_sol.27.7fg_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_sol.27.7e",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_sol.27.7e_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_sol.27.7d",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_sol.27.7d_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_sol.27.7a",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_sol.27.7a_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_sol.27.4",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_sol.27.4_assessment"
+      },
+      {
+        "name": "2025_sol.27.4_survey"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_sol.27.20-24",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_sol.27.20-24_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_san.sa.4",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_san.sa.4_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_san.sa.3r",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_san.sa.3r_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_san.sa.2r",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_san.sa.2r_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_san.sa.1r",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_san.sa.1r_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_pok.27.3a46",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_pok.27.3a46_assessment"
+      },
+      {
+        "name": "2025_pok.27.3a46_survey"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_ple.27.7e",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_ple.27.7e_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_ple.27.7d",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_ple.27.7d_assessment"
+      },
+      {
+        "name": "2025_ple.27.7d_survey"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_ple.27.7a",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_ple.27.7a_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_ple.27.420",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_ple.27.420_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_pil.27.8c9a",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_pil.27.8c9a_assessment"
+      }
+    ]
+  },
+  {
     "repo_name": "2025_pil.27.8abd",
     "publish_after_utc": "2026-01-01 01:00",
     "repos": [
       {
         "name": "2025_pil.27.8abd_assessment",
         "subdir": "V3.20b"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_pil.27.7",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_pil.27.7_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_nep.fu.9",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_nep.fu.9_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_nep.fu.8",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_nep.fu.8_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_nep.fu.7",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_nep.fu.7_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_nep.fu.2324",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_nep.fu.2324_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_nep.fu.22",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_nep.fu.22_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_nep.fu.2021",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_nep.fu.2021_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_nep.fu.19",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_nep.fu.19_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_nep.fu.17",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_nep.fu.17_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_nep.fu.16",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_nep.fu.16_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_mur.27.3a47d",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_mur.27.3a47d_assessment"
+      },
+      {
+        "name": "2025_mur.27.3a47d_survey"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_mac.27.nea",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_mac.27.nea_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_lez.27.6b",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_lez.27.6b_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_lem.27.3a47d",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_lem.27.3a47d_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_hom.27.9a",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_hom.27.9a_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_hom.27.4bc7d",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_hom.27.4bc7d_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_hom.27.2a3a4a5b6a7a-ce-k8",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_hom.27.2a3a4a5b6a7a-ce-k8_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_hke.27.8c9a",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_hke.27.8c9a_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_hke.27.3a46-8abd",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_hke.27.3a46-8abd_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_her.27.irls",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_her.27.irls_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_her.27.6aS7bc",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_her.27.6aS7bc_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_her.27.3a47d",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_her.27.3a47d_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_her.27.1-24a514a",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_her.27.1-24a514a_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_had.27.7b-k",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_had.27.7b-k_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_had.27.7a",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_had.27.7a_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_had.27.6b",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_had.27.6b_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_had.27.46a20",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_had.27.46a20_assessment"
+      },
+      {
+        "name": "2025_had.27.46a20_data"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_cod.27.7a",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_cod.27.7a_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_cod.27.46a7d20",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_cod.27.46a7d20_assessment"
+      },
+      {
+        "name": "2025_cod.27.46a7d20_data"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_cod.27.22-24",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_cod.27.22-24_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_cod.27.21",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_cod.27.21_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_boc.27.6-8",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_boc.27.6-8_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_bll.27.3a47de",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_bll.27.3a47de_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_aru.27.5b6a",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_aru.27.5b6a_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_ane.27.9aS",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_ane.27.9aS_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_ane.27.9a_west",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_ane.27.9a_west_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_ane.27.8",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_ane.27.8_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_wit.27.3a47d",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_wit.27.3a47d_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_whg.27.47d",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_whg.27.47d_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_whg.27.3a",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_whg.27.3a_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_tur.27.3a",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_tur.27.3a_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_sol.27.7fg",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_sol.27.7fg_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_sol.27.7e",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_sol.27.7e_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_sol.27.7d",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_sol.27.7d_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_sol.27.7a",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_sol.27.7a_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_sol.27.4",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_sol.27.4_assessment"
+      },
+      {
+        "name": "2024_sol.27.4_forecast"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_pok.27.3a46",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_pok.27.3a46_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_ple.27.7h-k",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_ple.27.7h-k_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_ple.27.7fg",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_ple.27.7fg_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_ple.27.7e",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_ple.27.7e_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_ple.27.7d",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_ple.27.7d_assessment"
+      },
+      {
+        "name": "2024_ple.27.7d_survey"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_ple.27.7a",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_ple.27.7a_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_ple.27.420",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_ple.27.420_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_nep.fu.9",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_nep.fu.9_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_nep.fu.8",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_nep.fu.8_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_nep.fu.7",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_nep.fu.7_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_nep.fu.22",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_nep.fu.22_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_nep.fu.2021",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_nep.fu.2021_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_nep.fu.19",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_nep.fu.19_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_mur.27.3a47d",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_mur.27.3a47d_assessment"
+      },
+      {
+        "name": "2024_mur.27.3a47d_survey"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_lez.27.6b",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_lez.27.6b_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_lem.27.3a47d",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_lem.27.3a47d_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_hom.27.9a",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_hom.27.9a_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_her.27.nirs",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_her.27.nirs_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_her.27.6aS7bc",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_her.27.6aS7bc_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_her.27.3a47d",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_her.27.3a47d_assessment"
+      },
+      {
+        "name": "2024_her.27.3a47d_forecast"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_had.27.7a",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_had.27.7a_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_had.27.46a20",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_had.27.46a20_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_cod.27.7a",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_cod.27.7a_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_cod.27.46a7d20",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_cod.27.46a7d20_assessment"
+      },
+      {
+        "name": "2024_cod.27.46a7d20_data"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_bll.27.3a47de",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_bll.27.3a47de_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_aru.27.5b6a",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_aru.27.5b6a_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_ane.27.9a",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_ane.27.9a_south_assessment"
+      },
+      {
+        "name": "2024_ane.27.9a_west_assessment"
       }
     ]
   }
