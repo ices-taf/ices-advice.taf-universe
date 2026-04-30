@@ -8,7 +8,7 @@ on:
 
 jobs:
   publish:
-    uses: ices-tools-prod/workflows/.github/workflows/publish-advice-code.yml@main
+    uses: ices-tools-prod/workflows/.github/workflows/publish-advice-code.yml@v1
     with:
       source_org: "ices-taf"
       target_org: "ices-advice"

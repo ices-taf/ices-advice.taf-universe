@@ -11,7 +11,7 @@ on:
 
 jobs:
   publish-after-date:
-    uses: ices-tools-prod/workflows/.github/workflows/sync-repo-visibility.yml@main
+    uses: ices-tools-prod/workflows/.github/workflows/sync-repo-visibility.yml@v1
     with:
       target_org: "ices-advice"
     secrets:
