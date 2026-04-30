@@ -1,4 +1,4 @@
-name: Publish advice repositories after release date
+name: Sync visibility based on publish date
 
 on:
   workflow_dispatch:
