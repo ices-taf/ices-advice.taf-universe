@@ -77,6 +77,8 @@ jobs:
                 '.sets[$set].sources[$repo] // empty' \
                 "$MANIFEST_FILE")
 
+              echo "Repo $SRC_ORG/$SRC_REPO - current SHA: $COMMIT_SHA, previous SHA: $PREV_SHA"
+
               if [ "$COMMIT_SHA" != "$PREV_SHA" ]; then
                 CHANGED=true
               fi
@@ -128,7 +130,7 @@ jobs:
                   dirs_to_clean+=(
                     "bootstrap/initial"
                     "bootstrap/data"
-                    "bootstrap/software",
+                    "bootstrap/software"
                     "boot/initial"
                     "boot/data"
                     "boot/software"
