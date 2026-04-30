@@ -19,7 +19,6 @@ CLEAN --> SAFE{Publish boot data?}
 SAFE -->|Yes| RUN{Run assessment?}
 SAFE -->|No| MORE
 
-
 RUN -->|Yes| BOOT[["taf.boot()"]]
 RUN -->|No| MORE[["taf.boot()"]]
 
