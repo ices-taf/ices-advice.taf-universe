@@ -4,6 +4,8 @@ on:
   workflow_dispatch:
   push:
     paths:
+      - repos.json
+      - published_commits.json
       - .github/workflows/publish-advice.yml
 
 jobs:
@@ -15,7 +17,7 @@ jobs:
 
     steps:
       - name: Checkout workflow repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
 
       - name: Configure git
         run: |
@@ -28,22 +30,75 @@ jobs:
           sudo apt-get install -y jq
           gh --version
 
-      - name: Publish sets to registry (single commit, force push)
+      - name: Publish sets to registry (only if changed)
         shell: bash
         run: |
           set -euo pipefail
 
-          jq -c '.sets[]' repos.json | while read -r set; do
+          MANIFEST_FILE="$GITHUB_WORKSPACE/published_commits.json"
+
+          # Initialise manifest if missing
+          if [ ! -f "$MANIFEST_FILE" ]; then
+            jq -n \
+              --arg date "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+              '{ generated_at_utc: $date, sets: {} }' \
+              > "$MANIFEST_FILE"
+          fi
+
+          # TEST MODE: first set only
+          jq -c '.sets[0:1][]' repos.json | while read -r set; do
             ORG_TARGET=$(jq -r '.org_target' <<<"$set")
             TARGET_REPO=$(jq -r '.repo_name' <<<"$set")
             SRC_ORG=$(jq -r '.org_source' <<<"$set")
+            SET_KEY="$ORG_TARGET/$TARGET_REPO"
 
-            echo "::group::Publishing $ORG_TARGET/$TARGET_REPO"
+            echo "::group::Evaluating set $SET_KEY"
 
             WORKDIR=$(mktemp -d)
             cd "$WORKDIR"
 
-            # --- initialise fresh git repo ---
+            # Track current repo SHAs
+            echo '{}' > .current_sources.json
+            CHANGED=false
+
+            # First pass: determine whether anything changed
+            jq -c '.repos[]' <<<"$set" | while read -r repo; do
+              SRC_REPO=$(jq -r '.name' <<<"$repo")
+
+              git clone --depth 1 \
+                "https://x-access-token:$GH_TOKEN@github.com/$SRC_ORG/$SRC_REPO.git" \
+                "$SRC_REPO"
+
+              COMMIT_SHA=$(cd "$SRC_REPO" && git rev-parse HEAD)
+
+              PREV_SHA=$(jq -r \
+                --arg set "$SET_KEY" \
+                --arg repo "$SRC_ORG/$SRC_REPO" \
+                '.sets[$set].sources[$repo] // empty' \
+                "$MANIFEST_FILE")
+
+              if [ "$COMMIT_SHA" != "$PREV_SHA" ]; then
+                CHANGED=true
+              fi
+
+              jq \
+                --arg key "$SRC_ORG/$SRC_REPO" \
+                --arg val "$COMMIT_SHA" \
+                '. + { ($key): $val }' \
+                .current_sources.json > .tmp.json && mv .tmp.json .current_sources.json
+
+              rm -rf "$SRC_REPO"
+            done
+
+            if [ "$CHANGED" != "true" ]; then
+              echo "No changes detected for $SET_KEY - skipping publish"
+              echo "::endgroup::"
+              continue
+            fi
+
+            echo "Changes detected - publishing $SET_KEY"
+
+            # --- rebuild registry repo ---
             mkdir registry
             cd registry
             git init
@@ -127,5 +182,31 @@ jobs:
 
             git push --force origin main
 
+            # --- update manifest ---
+            jq \
+              --arg set "$SET_KEY" \
+              --arg date "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+              --slurpfile src .current_sources.json \
+              '
+              .generated_at_utc = $date
+              | .sets[$set] = {
+                  published_at_utc: $date,
+                  sources: $src[0]
+                }
+              ' "$MANIFEST_FILE" > "$MANIFEST_FILE.next"
+
+            mv "$MANIFEST_FILE.next" "$MANIFEST_FILE"
+
             echo "::endgroup::"
           done
+
+      - name: Commit updated published_commits.json
+        shell: bash
+        run: |
+          git add published_commits.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Update published commit manifest"
+            git push
+          else
+            echo "No manifest changes to commit"
+          fi
