@@ -61,7 +61,13 @@ jobs:
             echo '{}' > .current_sources.json
             CHANGED=false
 
-            # First pass: determine whether anything changed
+            # Check whether set already exists in manifest
+            if ! jq -e --arg set "$SET_KEY" '.sets[$set]' "$MANIFEST_FILE" >/dev/null 2>&1; then
+              echo "No manifest entry for $SET_KEY - forcing republish"
+              CHANGED=true
+            fi
+
+            # First pass: compare SHAs
             jq -c '.repos[]' <<<"$set" | while read -r repo; do
               SRC_REPO=$(jq -r '.name' <<<"$repo")
 
