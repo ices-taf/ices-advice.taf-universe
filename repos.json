@@ -1,5 +1,23 @@
 [
   {
+    "repo_name": "2026_sol.27.20-24",
+    "publish_after_utc": "2026-05-29 10:00",
+    "repos": [
+      {
+        "name": "2026_sol.27.20-24_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_cod.27.21",
+    "publish_after_utc": "2026-05-29 10:00",
+    "repos": [
+      {
+        "name": "2026_cod.27.21_assessment"
+      }
+    ]
+  },
+  {
     "repo_name": "2026_her.27.6aS7bc",
     "publish_after_utc": "2026-04-30 10:00",
     "repos": [
