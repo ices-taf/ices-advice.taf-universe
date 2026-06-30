@@ -1,14 +1,5 @@
 [
   {
-    "repo_name": "2026_cod.27.6b",
-    "publish_after_utc": "2026-06-30 10:00",
-    "repos": [
-      {
-        "name": "2026_cod.27.6b_assessment"
-      }
-    ]
-  },
-  {
     "repo_name": "2026_cod.27.7a",
     "publish_after_utc": "2026-06-30 10:00",
     "repos": [
