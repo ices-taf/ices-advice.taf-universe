@@ -1,5 +1,302 @@
 [
   {
+    "repo_name": "2026_cod.27.6b",
+    "publish_after_utc": "2026-06-30 10:00",
+    "repos": [
+      {
+        "name": "2026_cod.27.6b_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_cod.27.7a",
+    "publish_after_utc": "2026-06-30 10:00",
+    "repos": [
+      {
+        "name": "2026_cod.27.7a_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_cod.27.7e-k",
+    "publish_after_utc": "2026-06-30 10:00",
+    "repos": [
+      {
+        "name": "2026_cod.27.7e-k_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_had.27.6b",
+    "publish_after_utc": "2026-06-30 10:00",
+    "repos": [
+      {
+        "name": "2026_had.27.6b_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_had.27.7b-k",
+    "publish_after_utc": "2026-06-30 10:00",
+    "repos": [
+      {
+        "name": "2026_had.27.7b-k_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_lez.27.4a6a",
+    "publish_after_utc": "2026-06-30 10:00",
+    "repos": [
+      {
+        "name": "2026_lez.27.4a6a_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_ple.27.7a",
+    "publish_after_utc": "2026-06-30 10:00",
+    "repos": [
+      {
+        "name": "2026_ple.27.7a_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_ple.27.7fg",
+    "publish_after_utc": "2026-06-30 10:00",
+    "repos": [
+      {
+        "name": "2026_ple.27.7fg_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_ple.27.7h-k",
+    "publish_after_utc": "2026-06-30 10:00",
+    "repos": [
+      {
+        "name": "2026_ple.27.7h-k_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_sol.27.7a",
+    "publish_after_utc": "2026-06-30 10:00",
+    "repos": [
+      {
+        "name": "2026_sol.27.7a_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_sol.27.7e",
+    "publish_after_utc": "2026-06-30 10:00",
+    "repos": [
+      {
+        "name": "2026_sol.27.7e_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_sol.27.7fg",
+    "publish_after_utc": "2026-06-30 10:00",
+    "repos": [
+      {
+        "name": "2026_sol.27.7fg_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_hke.27.8c9a",
+    "publish_after_utc": "2026-06-30 10:00",
+    "repos": [
+      {
+        "name": "2026_hke.27.8c9a_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_hke.27.3a46-8abd",
+    "publish_after_utc": "2026-06-30 10:00",
+    "repos": [
+      {
+        "name": "2026_hke.27.3a46-8abd_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_meg.27.7b-k8abd",
+    "publish_after_utc": "2026-06-30 10:00",
+    "repos": [
+      {
+        "name": "2026_meg.27.7b-k8abd_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_sol.27.8c9a",
+    "publish_after_utc": "2026-06-30 10:00",
+    "repos": [
+      {
+        "name": "2026_sol.27.8c9a_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_sol.27.8ab",
+    "publish_after_utc": "2026-06-30 10:00",
+    "repos": [
+      {
+        "name": "2026_sol.27.8ab_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_sos.27.8c9a",
+    "publish_after_utc": "2026-06-30 10:00",
+    "repos": [
+      {
+        "name": "2026_sos.27.8c9a_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_bll.27.3a47de",
+    "publish_after_utc": "2026-06-30 10:00",
+    "repos": [
+      {
+        "name": "2026_bll.27.3a47de_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_had.27.46a20",
+    "publish_after_utc": "2026-06-30 10:00",
+    "repos": [
+      {
+        "name": "2026_had.27.46a20_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_lem.27.3a47d",
+    "publish_after_utc": "2026-06-30 10:00",
+    "repos": [
+      {
+        "name": "2026_lem.27.3a47d_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_ple.27.420",
+    "publish_after_utc": "2026-06-30 10:00",
+    "repos": [
+      {
+        "name": "2026_ple.27.420_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_ple.27.7d",
+    "publish_after_utc": "2026-06-30 10:00",
+    "repos": [
+      {
+        "name": "2026_ple.27.7d_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_pok.27.3a46",
+    "publish_after_utc": "2026-06-30 10:00",
+    "repos": [
+      {
+        "name": "2026_pok.27.3a46_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_sol.27.4",
+    "publish_after_utc": "2026-06-30 10:00",
+    "repos": [
+      {
+        "name": "2026_sol.27.4_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_sol.27.7d",
+    "publish_after_utc": "2026-06-30 10:00",
+    "repos": [
+      {
+        "name": "2026_sol.27.7d_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_tur.27.3a",
+    "publish_after_utc": "2026-06-30 10:00",
+    "repos": [
+      {
+        "name": "2026_tur.27.3a_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_tur.27.4",
+    "publish_after_utc": "2026-06-30 10:00",
+    "repos": [
+      {
+        "name": "2026_tur.27.4_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_whg.27.3a",
+    "publish_after_utc": "2026-06-30 10:00",
+    "repos": [
+      {
+        "name": "2026_whg.27.3a_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_whg.27.47d",
+    "publish_after_utc": "2026-06-30 10:00",
+    "repos": [
+      {
+        "name": "2026_whg.27.47d_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_wit.27.3a47d",
+    "publish_after_utc": "2026-06-30 10:00",
+    "repos": [
+      {
+        "name": "2026_wit.27.3a47d_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_ane.27.9aW",
+    "publish_after_utc": "2026-06-30 10:00",
+    "repos": [
+      {
+        "name": "2026_ane.27.9aW_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_hom.27.9a",
+    "publish_after_utc": "2026-06-30 10:00",
+    "repos": [
+      {
+        "name": "2026_hom.27.9a_assessment"
+      }
+    ]
+  },
+  {
     "repo_name": "2026_sol.27.20-24",
     "publish_after_utc": "2026-06-30 10:00",
     "repos": [
