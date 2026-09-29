@@ -1,0 +1,189 @@
+name: Publish head commit to ices-advice
+
+# Publishes a snapshot of the HEAD commit of each (private) source repository
+# listed in head_repos.json to a public repository in the target organisation.
+# The code is copied as-is (no cleaning); only the latest commit is published,
+# not the history. A repo is only republished when its HEAD SHA has changed.
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 10 * * *'
+  push:
+    branches: [main]
+    paths:
+      - head_repos.json
+      - .github/workflows/publish-head.yml
+
+concurrency:
+  group: publish-head
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+env:
+  SOURCE_ORG: ices-taf
+  TARGET_ORG: ices-advice
+  REPOS_FILE: head_repos.json
+  MANIFEST_FILE: published_head_commits.json
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    env:
+      GH_TOKEN: ${{ secrets.CROSS_ORG_TOKEN }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure git
+        run: |
+          git config --global user.name "ices-github-bot"
+          git config --global user.email "github@ices.dk"
+
+      - name: Publish head commits
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          MANIFEST="$GITHUB_WORKSPACE/$MANIFEST_FILE"
+          PUBLISHED="$GITHUB_WORKSPACE/.published.txt"
+          FAILED="$GITHUB_WORKSPACE/.failed.txt"
+          : > "$PUBLISHED"
+          : > "$FAILED"
+          export MANIFEST PUBLISHED
+
+          if [ ! -f "$MANIFEST" ]; then
+            echo '{"generated_at_utc": null, "repos": {}}' > "$MANIFEST"
+          fi
+
+          publish_one() {
+            local entry="$1"
+            local src_org tgt_org src_repo tgt_repo ref src_key tgt_key
+            src_org=$(jq -r ".org_source // \"$SOURCE_ORG\"" <<<"$entry")
+            tgt_org=$(jq -r ".org_target // \"$TARGET_ORG\"" <<<"$entry")
+            src_repo=$(jq -r '.name' <<<"$entry")
+            tgt_repo=$(jq -r '.target_name // .name' <<<"$entry")
+            ref=$(jq -r '.branch // empty' <<<"$entry")
+            src_key="$src_org/$src_repo"
+            tgt_key="$tgt_org/$tgt_repo"
+
+            local workdir
+            workdir=$(mktemp -d)
+
+            git clone --depth 1 ${ref:+--branch "$ref"} \
+              "https://x-access-token:$GH_TOKEN@github.com/$src_key.git" \
+              "$workdir/src"
+
+            local sha prev
+            sha=$(git -C "$workdir/src" rev-parse HEAD)
+            prev=$(jq -r --arg k "$tgt_key" '.repos[$k].commit // empty' "$MANIFEST")
+            echo "$src_key HEAD: $sha (previously published: ${prev:-none})"
+
+            if [ "$sha" = "$prev" ]; then
+              echo "Unchanged - skipping $tgt_key"
+              rm -rf "$workdir"
+              return 0
+            fi
+
+            # snapshot of the head commit without history
+            rm -rf "$workdir/src/.git"
+            git -C "$workdir/src" init -q -b main
+            git -C "$workdir/src" add -A
+            git -C "$workdir/src" commit -q -m "Published from $src_key@$sha on $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+
+            if ! gh repo view "$tgt_key" >/dev/null 2>&1; then
+              echo "Creating public repository $tgt_key"
+              gh repo create "$tgt_key" --public
+            fi
+
+            git -C "$workdir/src" push --force \
+              "https://x-access-token:$GH_TOKEN@github.com/$tgt_key.git" main
+
+            jq --arg k "$tgt_key" --arg src "$src_key" --arg sha "$sha" \
+              --arg date "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+              '.generated_at_utc = $date
+               | .repos[$k] = {source: $src, commit: $sha, published_at_utc: $date}' \
+              "$MANIFEST" > "$MANIFEST.next"
+            mv "$MANIFEST.next" "$MANIFEST"
+
+            echo "$tgt_key" >> "$PUBLISHED"
+            rm -rf "$workdir"
+          }
+
+          export -f publish_one
+
+          while read -r entry; do
+            name=$(jq -r '.name' <<<"$entry")
+            echo "::group::$name"
+            # run in a fresh shell so that `set -e` aborts on the first error
+            if ! bash -euo pipefail -c 'publish_one "$1"' _ "$entry"; then
+              echo "::error::Failed to publish $name"
+              echo "$name" >> "$FAILED"
+            fi
+            echo "::endgroup::"
+          done < <(jq -c '.[]' "$REPOS_FILE")
+
+          if [ -s "$FAILED" ]; then
+            echo "Failed: $(tr '\n' ' ' < "$FAILED")"
+          fi
+
+      - name: Commit updated manifest
+        shell: bash
+        run: |
+          git add "$MANIFEST_FILE"
+          if ! git diff --cached --quiet; then
+            git commit -m "Update published head commit manifest"
+            git pull --rebase
+            git push
+          else
+            echo "No manifest changes to commit"
+          fi
+
+      - name: Notify Teams
+        if: always()
+        shell: bash
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "${TEAMS_WEBHOOK_URL:-}" ]; then
+            echo "TEAMS_WEBHOOK_URL not set - skipping Teams notification"
+            exit 0
+          fi
+
+          PUBLISHED_SECTION=""
+          FAILED_SECTION=""
+
+          if [ -s .published.txt ]; then
+            LIST=$(sort -u .published.txt | awk '{print "- https://github.com/" $0}')
+            PUBLISHED_SECTION=$(printf "**✅ Repositories published or updated**\n\n%s\n\n" "$LIST")
+          fi
+
+          if [ -s .failed.txt ]; then
+            LIST=$(sed 's|^|- |' .failed.txt)
+            FAILED_SECTION=$(printf "⚠️ **Repositories that failed to publish**\n\n%s\n\n" "$LIST")
+          fi
+
+          if [ -z "$PUBLISHED_SECTION" ] && [ -z "$FAILED_SECTION" ]; then
+            echo "Nothing to report - skipping Teams notification"
+            exit 0
+          fi
+
+          MESSAGE=$(printf "%s\n\n%s\n\n_Checked at %s (UTC)_" \
+            "$PUBLISHED_SECTION" "$FAILED_SECTION" "$(date -u +%Y-%m-%dT%H:%M:%SZ)")
+
+          payload=$(jq -n --arg msg "$MESSAGE" '{
+            "@type": "MessageCard",
+            "@context": "https://schema.org/extensions",
+            "summary": "Head commit publish",
+            "themeColor": "2EB886",
+            "title": "📢 Repositories published to ices-advice",
+            "text": $msg
+          }')
+
+          curl -s -X POST -H "Content-Type: application/json" -d "$payload" "$TEAMS_WEBHOOK_URL"

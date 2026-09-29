@@ -62,3 +62,26 @@ and this can be done by setting the `subdir` feild element of the repos array to
   }
 ]
 ```
+
+## Publishing the head commit of a repository
+
+The workflow `.github/workflows/publish-head.yml` publishes a snapshot of the
+HEAD commit of each repository listed in `head_repos.json` from `ices-taf` to
+a **public** repository of the same name in `ices-advice`. The code is copied
+as-is (no cleaning, no TAF run), and only a single commit is pushed, so the
+source history is not exposed. A repository is only republished when its HEAD
+has changed since the last publish, as recorded in `published_head_commits.json`.
+
+It runs when `head_repos.json` changes, daily at 10:30 UTC, and on demand.
+
+```json
+[
+  {
+    "name": "2026_impacts.rebuilding.HCRs.mixed.fisheries_SpecialRequest"
+  }
+]
+```
+
+Optional fields per entry: `target_name` (name of the repo in `ices-advice`,
+defaults to `name`), `branch` (source branch, defaults to the default branch),
+`org_source` and `org_target`.
