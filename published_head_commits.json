@@ -1,10 +1,15 @@
 {
-  "generated_at_utc": "2026-09-29T14:02:34Z",
+  "generated_at_utc": "2026-09-30T09:01:08Z",
   "repos": {
     "ices-advice/2026_impacts.rebuilding.HCRs.mixed.fisheries_SpecialRequest": {
       "source": "ices-taf/2026_impacts.rebuilding.HCRs.mixed.fisheries_SpecialRequest",
       "commit": "1ede05395a7531eac7f6bf28e8718ff6c9d615eb",
       "published_at_utc": "2026-09-29T14:02:34Z"
+    },
+    "ices-advice/2026_mac.27.nea_HCR_rebuild": {
+      "source": "ices-taf/2026_mac.27.nea_HCR_rebuild",
+      "commit": "57396937fbba32c3c005b134ea24fe233b8630bb",
+      "published_at_utc": "2026-09-30T09:01:08Z"
     }
   }
 }
