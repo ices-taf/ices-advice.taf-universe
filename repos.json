@@ -1,5 +1,17 @@
 [
   {
+    "repo_name": "2026_cod.27.46a7d20",
+    "publish_after_utc": "2026-10-09 10:00",
+    "repos": [
+      {
+        "name": "2026_cod.27.46a7d20_data"
+      },
+      {
+        "name": "2026_cod.27.46a7d20_assessment"
+      }
+    ]
+  },
+  {
     "repo_name": "2026_hom.27.2a3a4a5b6a7a-ce-k8",
     "publish_after_utc": "2026-09-30 10:00",
     "repos": [
