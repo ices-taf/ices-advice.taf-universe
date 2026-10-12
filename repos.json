@@ -1,5 +1,23 @@
 [
   {
+    "repo_name": "2025_sol.27.8ab",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_sol.27.8ab_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_whg.27.47d",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_whg.27.47d_assessment"
+      }
+    ]
+  },
+  {
     "repo_name": "2024_hom.27.3a4bc7d",
     "publish_after_utc": "2026-01-01 01:00",
     "repos": [
