@@ -1,5 +1,23 @@
 [
   {
+    "repo_name": "2026_bli.27.5b6712",
+    "publish_after_utc": "2026-09-30 10:00",
+    "repos": [
+      {
+        "name": "2026_bli.27.5b6712_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_hke27.8c9a",
+    "publish_after_utc": "2026-09-30 10:00",
+    "repos": [
+      {
+        "name": "2026_hke27.8c9a_assessment"
+      }
+    ]
+  },
+  {
     "repo_name": "2026_cod.27.46a7d20",
     "publish_after_utc": "2026-10-09 10:00",
     "repos": [
