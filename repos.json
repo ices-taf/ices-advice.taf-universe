@@ -1,5 +1,14 @@
 [
   {
+    "repo_name": "2026_aru.27.5b6a",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2026_aru.27.5b6a_assessment"
+      }
+    ]
+  },
+  {
     "repo_name": "2026_bli.27.5b6712",
     "publish_after_utc": "2026-09-30 10:00",
     "repos": [
