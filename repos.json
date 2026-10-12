@@ -1,5 +1,113 @@
 [
   {
+    "repo_name": "2024_ane.27.8",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_ane.27.8_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_boc.27.6-8",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_boc.27.6-8_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_her.27.1-24a514a",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_her.27.1-24a514a_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_her.27.irls",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_her.27.irls_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_hke.27.3a46-8abd",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_hke.27.3a46-8abd_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_hom.27.2a4a5b6a7a-ce-k8",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_hom.27.2a4a5b6a7a-ce-k8_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_meg.27.7b-k8abd",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_meg.27.7b-k8abd_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_pil.27.7",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_pil.27.7_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_pil.27.8abd",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_pil.27.8abd_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_pil.27.8c9a",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_pil.27.8c9a_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2024_whb.27.1-91214",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2024_whb.27.1-91214_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2025_meg.27.7b-k8abd",
+    "publish_after_utc": "2026-01-01 01:00",
+    "repos": [
+      {
+        "name": "2025_meg.27.7b-k8abd_assessment"
+      }
+    ]
+  },
+  {
     "repo_name": "2025_sol.27.8ab",
     "publish_after_utc": "2026-01-01 01:00",
     "repos": [
