@@ -198,15 +198,6 @@
     ]
   },
   {
-    "repo_name": "2026_hke27.8c9a",
-    "publish_after_utc": "2026-09-30 10:00",
-    "repos": [
-      {
-        "name": "2026_hke27.8c9a_assessment"
-      }
-    ]
-  },
-  {
     "repo_name": "2026_cod.27.46a7d20",
     "publish_after_utc": "2026-10-09 10:00",
     "repos": [
@@ -1533,6 +1524,141 @@
       },
       {
         "name": "2024_ane.27.9a_west_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_lez.27.6b",
+    "publish_after_utc": "2026-10-30 08:00",
+    "repos": [
+      {
+        "name": "2026_lez.27.6b_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_nep.fu.15",
+    "publish_after_utc": "2026-10-30 08:00",
+    "repos": [
+      {
+        "name": "2026_nep.fu.15_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_nep.fu.16",
+    "publish_after_utc": "2026-10-30 08:00",
+    "repos": [
+      {
+        "name": "2026_nep.fu.16_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_nep.fu.17",
+    "publish_after_utc": "2026-10-30 08:00",
+    "repos": [
+      {
+        "name": "2026_nep.fu.17_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_nep.fu.19",
+    "publish_after_utc": "2026-10-30 08:00",
+    "repos": [
+      {
+        "name": "2026_nep.fu.19_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_nep.fu.2021",
+    "publish_after_utc": "2026-10-30 08:00",
+    "repos": [
+      {
+        "name": "2026_nep.fu.2021_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_nep.fu.22",
+    "publish_after_utc": "2026-10-30 08:00",
+    "repos": [
+      {
+        "name": "2026_nep.fu.22_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_nep.fu.2324",
+    "publish_after_utc": "2026-10-30 08:00",
+    "repos": [
+      {
+        "name": "2026_nep.fu.2324_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_nep.fu.2829",
+    "publish_after_utc": "2026-10-30 08:00",
+    "repos": [
+      {
+        "name": "2026_nep.fu.2829_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_nep.fu.32",
+    "publish_after_utc": "2026-10-30 08:00",
+    "repos": [
+      {
+        "name": "2026_nep.fu.32_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_nep.fu.7",
+    "publish_after_utc": "2026-10-30 08:00",
+    "repos": [
+      {
+        "name": "2026_nep.fu.7_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_nep.fu.8",
+    "publish_after_utc": "2026-10-30 08:00",
+    "repos": [
+      {
+        "name": "2026_nep.fu.8_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_nep.fu.9",
+    "publish_after_utc": "2026-10-30 08:00",
+    "repos": [
+      {
+        "name": "2026_nep.fu.9_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_whg.27.6a",
+    "publish_after_utc": "2026-10-30 08:00",
+    "repos": [
+      {
+        "name": "2026_whg.27.6a_assessment"
+      }
+    ]
+  },
+  {
+    "repo_name": "2026_whg.27.7a",
+    "publish_after_utc": "2026-10-30 08:00",
+    "repos": [
+      {
+        "name": "2026_whg.27.7a_assessment"
       }
     ]
   }
