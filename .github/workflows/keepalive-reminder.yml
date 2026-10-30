@@ -1,0 +1,39 @@
+name: Remind to keep scheduled workflows active
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 9 1 * *'
+
+permissions: {}
+
+jobs:
+  remind:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Teams
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          URL="https://github.com/$GITHUB_REPOSITORY/actions/workflows/keepalive.yml"
+
+          MESSAGE=$(printf "Please keep the scheduled workflows running:\n\n1. Open the [keepalive workflow](%s)\n2. Click **Run workflow**\n3. Click the green **Run workflow** button" "$URL")
+
+          payload=$(jq -n \
+            --arg msg "$MESSAGE" \
+            '{
+              "@type": "MessageCard",
+              "@context": "https://schema.org/extensions",
+              "summary": "Scheduled workflow reminder",
+              "themeColor": "2EB886",
+              "title": "⏰ Scheduled workflow reminder",
+              "text": $msg
+            }')
+
+          curl -sf -X POST \
+            -H "Content-Type: application/json" \
+            -d "$payload" \
+            "$TEAMS_WEBHOOK_URL"
