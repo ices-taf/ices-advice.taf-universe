@@ -6,16 +6,35 @@ on:
     # GitHub disables scheduled workflows after 60 days without repository activity
     - cron: '0 9 1 * *'
 
-permissions:
-  contents: write
+permissions: {}
 
 jobs:
   keepalive:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - run: |
-          git config user.name "ices-github-bot"
-          git config user.email "github@ices.dk"
-          git commit --allow-empty -m "Keep scheduled workflows active"
-          git push
+      - name: Notify Teams
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          COMMAND="for w in publish-after-date publish-head keepalive; do gh workflow enable \$w.yml -R $GITHUB_REPOSITORY; done"
+
+          MESSAGE=$(printf "GitHub turns off scheduled workflows after 60 days without repository activity.\n\nPaste this into the command line to keep them running:\n\n\`%s\`" "$COMMAND")
+
+          payload=$(jq -n \
+            --arg msg "$MESSAGE" \
+            '{
+              "@type": "MessageCard",
+              "@context": "https://schema.org/extensions",
+              "summary": "Scheduled workflow reminder",
+              "themeColor": "2EB886",
+              "title": "⏰ Scheduled workflow reminder",
+              "text": $msg
+            }')
+
+          curl -sf -X POST \
+            -H "Content-Type: application/json" \
+            -d "$payload" \
+            "$TEAMS_WEBHOOK_URL"
